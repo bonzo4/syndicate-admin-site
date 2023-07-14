@@ -9,7 +9,7 @@ export function LoginButton() {
     await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
-        redirectTo: process.env.NEXT_PUBLIC_URL!,
+        redirectTo: `${process.env.NEXT_PUBLIC_URL!}/api/auth/callback`,
         scopes: 'identify guilds'
       }
     })
