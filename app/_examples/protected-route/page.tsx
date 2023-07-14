@@ -40,7 +40,7 @@ export default async function ProtectedRoute() {
             Protected page
           </code>
           <span className="flex gap-4">
-            Hey, {user.email}! <span className="border-r"></span>{' '}
+            Hey, {user.user_metadata.fullname}! <span className="border-r"></span>{' '}
             <form action={signOut}>
               <button className="text-neutral-100">Logout</button>
             </form>

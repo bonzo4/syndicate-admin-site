@@ -11,9 +11,14 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = createRouteHandlerClient({ cookies })
-    await supabase.auth.exchangeCodeForSession(code)
+      await supabase.auth.exchangeCodeForSession(code)
+      const { data: user } = await supabase.auth.getUser()
+      if (user) {
+        return NextResponse.redirect('/dashboard')
+      }
   }
 
   // URL to redirect to after sign in process completes
+  
   return NextResponse.redirect(requestUrl.origin)
 }
