@@ -10,7 +10,6 @@ export function LoginButton() {
       provider: 'discord',
       options: {
         redirectTo: `${process.env.NEXT_PUBLIC_URL!}/auth/callback`,
-        scopes: 'identify'
       }
     })
   }
