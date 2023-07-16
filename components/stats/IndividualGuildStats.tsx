@@ -16,7 +16,7 @@ export function IndividualGuildStats({guildId, members}: IndividualGuildStatsPro
   const views = useCountStatsByGuild(supabase, guildId, "views");
   const interactions = useCountStatsByGuild(supabase, guildId, "interactions")
   const channels = useCountStatsByGuild(supabase, guildId, "news_channels");
-  const mentions = useCountStatsByGuild(supabase, guildId, "mentions_roles");
+  const mentions = useCountStatsByGuild(supabase, guildId, "mention_roles");
 
   
   return (

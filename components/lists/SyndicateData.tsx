@@ -18,6 +18,8 @@ export function SyndicateStats() {
     "Unique users per server": userMetrics.totalUsers / guildMetrics.totalGuilds,
     "Total views per server": viewMetrics.totalViews / guildMetrics.totalGuilds,
     "Total interactions per server": interactionMetrics.totalInteractions / guildMetrics.totalGuilds,
+    "Total views per news post": viewMetrics.totalViews / newsMetrics.totalNews,
+    "Total interactions per news post": interactionMetrics.totalInteractions / newsMetrics.totalNews,
   }
 
 
