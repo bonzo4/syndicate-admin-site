@@ -3,7 +3,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 export async function getUserCount(supabase: SupabaseClient<Database>): Promise<number> {
     const { count, error } = await supabase
-        .from("users")
+        .from("discord_users")
         .select("id", { count: 'exact' });
 
     if (error || !count) {

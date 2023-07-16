@@ -141,7 +141,7 @@ export async function getViewsPerMonth(supabase: SupabaseClient<Database>, total
 
     const date = new Date(data.created_at);
 
-    return totalViews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
+    return totalViews / (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)) ? Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)) : 1);
 }
 
 export async function getViewsLastMonth(supabase: SupabaseClient<Database>): Promise<number> {
