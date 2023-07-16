@@ -25,7 +25,8 @@ export default async function RootLayout({
     .from('discord_users')
     .select('staff_role')
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
+        .single()
     
   
   if (error || !userData) redirect('/')

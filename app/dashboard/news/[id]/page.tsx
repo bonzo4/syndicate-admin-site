@@ -16,7 +16,8 @@ export default async function GuildInfoPage({ params }: { params: { id: number }
     .from('discord_news')
     .select('*')
     .eq('id', params.id)
-    .single()
+    .limit(1)
+        .single()
   
   if (!news || error) return
   

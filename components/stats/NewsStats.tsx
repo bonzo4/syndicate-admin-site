@@ -3,14 +3,14 @@
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { StatsCard } from "./StatsCard";
-import { useViewStats,  useInteractions } from "@/hooks/stats/news";
+import { useCountStats } from "@/hooks/stats/stats";
 
 export function NewsStats() {
 
   const supabase = createClientComponentClient<Database>()
 
-  const views = useViewStats(supabase);
-  const interactions = useInteractions(supabase)
+  const views = useCountStats(supabase, "views");
+  const interactions = useCountStats(supabase, "interactions")
   
   return (
     <div className="flex flex-row items-center ">

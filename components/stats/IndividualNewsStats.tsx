@@ -3,7 +3,7 @@
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { StatsCard } from "./StatsCard";
-import { useViewStatsByNews, useInteractionStatsByNews, useErrorsByNews, useViewStats, useInteractions } from "@/hooks/stats/news";
+import { useCountStatsByNews } from "@/hooks/stats/stats";
 
 type IndividualNewsStatsProps = {
   newsId: number
@@ -12,9 +12,9 @@ type IndividualNewsStatsProps = {
 export function IndividualNewsStats({newsId}: IndividualNewsStatsProps) {
 
   const supabase = createClientComponentClient<Database>()
-  const views = useViewStatsByNews(supabase, newsId)
-  const interactions = useInteractionStatsByNews(supabase, newsId)
-  const errors = useErrorsByNews(supabase, newsId)
+  const views = useCountStatsByNews(supabase, newsId, "views");
+  const interactions = useCountStatsByNews(supabase, newsId, "interactions")
+  const errors = useCountStatsByNews(supabase, newsId, "bot_errors");
 
   
   return (

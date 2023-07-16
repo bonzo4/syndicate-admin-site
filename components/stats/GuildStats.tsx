@@ -3,16 +3,16 @@
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { StatsCard } from "./StatsCard";
-import { useGuildStats,  useGuildSettingsStats,  useMentionRolesStats, useChannelStats} from "../../hooks/stats/guilds";
+import { useCountStats } from "@/hooks/stats/stats";
 
 export function GuildStats() {
 
   const supabase = createClientComponentClient<Database>()
 
-  const guilds = useGuildStats(supabase);
-  const guildSettings = useGuildSettingsStats(supabase);
-  const channels = useChannelStats(supabase);
-  const mentionRoles = useMentionRolesStats(supabase);
+  const guilds = useCountStats(supabase, "guilds");
+  const guildSettings = useCountStats(supabase, "guild_settings", "guild_id");
+  const channels = useCountStats(supabase, "news_channels");
+  const mentionRoles = useCountStats(supabase, "mention_roles")
   
   return (
     <div className="flex flex-row items-center ">

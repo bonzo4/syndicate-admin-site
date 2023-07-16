@@ -7,44 +7,131 @@ export type Stats = {
     change: number;
 } 
 
-export const useUserStats = (supabase: SupabaseClient<Database>): Stats => {
-    const [userStats, setUserStats] = useState<Stats>({
+export const useCountStats = (supabase: SupabaseClient<Database>, table: string, idName: string = "id"): Stats => {
+    const [countStats, setCountStats] = useState<Stats>({
         value: 0,
         change: 0
     })
-    
+
     useEffect(() => {
-        const getUserCount = async () => {
-            const { count: users, error } = await supabase
-                .from("discord_users")
-                .select("id", { count: 'exact' });
-            const { count: usersToday, error: error2 } = await supabase
-                .from("discord_users")
-                .select("id", { count: 'exact' })
+        const getCount = async () => {
+            const { count, error } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' });
+            const { count: countToday, error: error2 } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
                 .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
-            const { count: usersYesterday, error: error3 } = await supabase
-                .from("discord_users")
-                .select("id", { count: 'exact' })
-                .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString())
-                .lte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
-            if (error || error2 || error3 || !users || !usersToday || !usersYesterday) {
+            if (error || error2 || !count || !countToday ) {
                 return;
             }
 
-            const usersTodayChange = usersToday - usersYesterday;
-            const usersTodayChangePercent = usersTodayChange / usersYesterday * 100;
-
-            setUserStats({ 
-                value: users,
-                change: usersTodayChangePercent
+            setCountStats({ 
+                value: count,
+                change: countToday
             });
         }
-        getUserCount();
-    }, [supabase]);
-            
-    return userStats;
+        getCount();
+    }, [supabase, table, idName]);
+
+    return countStats;
 }
 
+export const useCountStatsByNews = (supabase: SupabaseClient<Database>,newsId: number, table: string,  idName: string = "id"): Stats => {
+    const [countStats, setCountStats] = useState<Stats>({
+        value: 0,
+        change: 0
+    })
+
+    useEffect(() => {
+        const getCount = async () => {
+            const { count, error } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("news_id", newsId);
+            const { count: countToday, error: error2 } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("news_id", newsId)
+                .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
+            if (error || error2 || !count || !countToday) {
+                return;
+            }
+
+            setCountStats({
+                value: count,
+                change: countToday
+            });
+        }
+        getCount();
+    }, [supabase, table, idName, newsId]);
+
+    return countStats;
+}
+
+export const useCountStatsByGuild = (supabase: SupabaseClient<Database>,guildId: string, table: string,  idName: string = "id"): Stats => {
+    const [countStats, setCountStats] = useState<Stats>({
+        value: 0,
+        change: 0
+    })
+
+    useEffect(() => {
+        const getCount = async () => {
+            const { count, error } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("guild_id", guildId);
+            const { count: countToday, error: error2 } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("guild_id", guildId)
+                .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
+            if (error || error2 || !count || !countToday ) {
+                return;
+            }
+
+            setCountStats({ 
+                value: count,
+                change: countToday
+            });
+        }
+        getCount();
+    }, [supabase, table, idName, guildId]);
+
+    return countStats;
+}
+
+export const useCountStatsByUser = (supabase: SupabaseClient<Database>, table: string, userId: string, idName: string = "id"): Stats => {
+    const [countStats, setCountStats] = useState<Stats>({
+        value: 0,
+        change: 0
+    })
+
+    useEffect(() => {
+        const getCount = async () => {
+            const { count, error } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("user_id", userId);
+            const { count: countToday, error: error2 } = await supabase
+                .from(table)
+                .select(idName, { count: 'exact' })
+                .eq("user_id", userId)
+                .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
+            if (error || error2 || !count || !countToday ) {
+                return;
+            }
+
+            setCountStats({ 
+                value: count,
+                change: countToday
+            });
+        }
+        getCount();
+    }, [supabase, table, idName, userId]);
+
+    return countStats;
+}
 
 
 

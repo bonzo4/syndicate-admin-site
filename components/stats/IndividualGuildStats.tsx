@@ -3,8 +3,7 @@
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { StatsCard } from "./StatsCard";
-import { useNewsChannelsByGuild, useInteractionsStatsByGuild, useViewStatsByGuild, useMentionsByGuild } from "@/hooks/stats/guilds";
-import { Stats } from "./Stats";
+import { useCountStatsByGuild } from "@/hooks/stats/stats";
 
 type IndividualGuildStatsProps = {
   guildId: string
@@ -14,10 +13,10 @@ type IndividualGuildStatsProps = {
 export function IndividualGuildStats({guildId, members}: IndividualGuildStatsProps) {
 
   const supabase = createClientComponentClient<Database>()
-  const views = useViewStatsByGuild(supabase, guildId)
-  const interactions = useInteractionsStatsByGuild(supabase, guildId)
-  const channels = useNewsChannelsByGuild(supabase, guildId)
-  const mentions = useMentionsByGuild(supabase, guildId)
+  const views = useCountStatsByGuild(supabase, guildId, "views");
+  const interactions = useCountStatsByGuild(supabase, guildId, "interactions")
+  const channels = useCountStatsByGuild(supabase, guildId, "news_channels");
+  const mentions = useCountStatsByGuild(supabase, guildId, "mentions_roles");
 
   
   return (
@@ -26,8 +25,8 @@ export function IndividualGuildStats({guildId, members}: IndividualGuildStatsPro
         <StatsCard name="views" value={views.value} change={views.change} />
         <StatsCard name="interactions" value={interactions.value} change={interactions.change} />
         <StatsCard name="users" value={members} />
-        <StatsCard name="channels" value={channels.length} />
-        <StatsCard name="mention roles" value={mentions.length} />
+        <StatsCard name="channels" value={channels.value} />
+        <StatsCard name="mention roles" value={mentions.value} />
       </div>
     </div>
   )

@@ -19,13 +19,9 @@ export function StatsCard({ name, value, change }: StatsCardProps) {
         <h1 className="text-foreground text-2xl font-bold">
           {value}
         </h1>
-        {change ?
-          change > 0 ? (
-            <h1 className="text-xl text-[color:green]">↑{change.toFixed(0)}%</h1>
-          ) : (
-            <h1 className="text-xl text-[color:red]">↓{change.toFixed(0)}%</h1>
-          )
-        : null}
+        <h1 className="text-foreground text-2xl font-bold">
+          +{change ? change : 0}
+        </h1>
       </div>
     </div>
 

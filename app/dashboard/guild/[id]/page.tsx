@@ -12,19 +12,22 @@ export default async function GuildInfoPage({ params }: { params: { id: string }
     .from('guilds')
     .select('*')
     .eq('id', params.id)
-    .single()
+    .limit(1)
+        .single()
   
   const { data: guildSettings } = await supabase
     .from('guild_settings')
     .select('*')
     .eq('guild_id', params.id)
-    .single()
+    .limit(1)
+        .single()
   
   const { data: guildReferral } = await supabase
     .from('guild_referrals')
     .select('user_id')
     .eq('guild_id', params.id)
-    .single()
+    .limit(1)
+        .single()
   
   if (error) return 
 
