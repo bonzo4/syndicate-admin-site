@@ -27,7 +27,7 @@ export async function getGuildsPerMonth(supabase: SupabaseClient<Database>, tota
     }
 
     const date = new Date(firstGuild.joined_at);
-    return totalGuilds / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
+    return totalGuilds / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
 }
 
 export async function getGuildsPerWeek(supabase: SupabaseClient<Database>, totalGuilds: number): Promise<number>{
@@ -44,7 +44,7 @@ export async function getGuildsPerWeek(supabase: SupabaseClient<Database>, total
     
     const date = new Date(data.joined_at);
 
-    return totalGuilds / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7));
+    return totalGuilds / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7);
 }
 
 export async function getGuildsLastWeek(supabase: SupabaseClient<Database>): Promise<number> {

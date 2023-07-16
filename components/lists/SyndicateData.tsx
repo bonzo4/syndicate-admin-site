@@ -67,7 +67,7 @@ export async function SyndicateStats() {
     },
     {
       label: "Views per month",
-      value: await getInteractionsPerMonth(supabase, totalInteractions),
+      value: await getInteractionsPerMonth(supabase, totalViews),
       unit: "views"
     },
     {
@@ -77,7 +77,7 @@ export async function SyndicateStats() {
     },
     {
       label: "Views per week",
-      value: await getInteractionsPerWeek(supabase, totalInteractions),
+      value: await getInteractionsPerWeek(supabase, totalViews),
       unit: "views"
     },
     {
@@ -87,7 +87,7 @@ export async function SyndicateStats() {
     },
     {
       label: "Views per day",
-      value: await getInteractionsPerDay(supabase, totalInteractions),
+      value: await getInteractionsPerDay(supabase, totalViews),
       unit: "views"
     },
     {

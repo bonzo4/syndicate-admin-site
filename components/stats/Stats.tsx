@@ -11,7 +11,7 @@ export function Stats() {
 
   const guilds = useCountStats(supabase, "guilds");
   const channels = useCountStats(supabase, "news_channels");
-  const users = useCountStats(supabase, "users");
+  const users = useCountStats(supabase, "discord_users");
   const views = useCountStats(supabase, "views");
   const interactions = useCountStats(supabase, "interactions")
   

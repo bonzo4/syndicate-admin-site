@@ -27,7 +27,7 @@ export async function getUsersPerDay(supabase: SupabaseClient<Database>, totalUs
     
     const date = new Date(data.created_at);
 
-    return totalUsers / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+    return totalUsers / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
 }
 
 export async function getUsersLastDay(supabase: SupabaseClient<Database>): Promise<number> {
