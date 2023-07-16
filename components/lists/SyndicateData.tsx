@@ -1,5 +1,5 @@
 import { getGuildsLastMonth, getGuildsPerMonth, getGuildsPerWeek, getGuildsLastWeek, getGuildsLeftLastMonth, getGuildsLeftLastWeek, getGuildCount } from "@/utils/stats/guild";
-import { getInteractionCount, getInteractionsLastDay, getInteractionsLastMonth, getInteractionsLastWeek, getInteractionsPerDay, getInteractionsPerMonth, getInteractionsPerWeek, getNewsCount, getNewsLastMonth, getNewsLastWeek, getNewsPerMonth, getNewsPerWeek, getViewCount } from "@/utils/stats/news";
+import { getInteractionCount, getInteractionsLastDay, getInteractionsLastMonth, getInteractionsLastWeek, getInteractionsPerDay, getInteractionsPerMonth, getInteractionsPerWeek, getNewsCount, getNewsLastMonth, getNewsLastWeek, getNewsPerMonth, getNewsPerWeek, getViewCount, getViewsLastDay, getViewsLastMonth, getViewsLastWeek, getViewsPerDay, getViewsPerMonth, getViewsPerWeek } from "@/utils/stats/news";
 import { getUserCount, getUsersLastDay, getUsersPerDay } from "@/utils/stats/user";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
@@ -67,32 +67,32 @@ export async function SyndicateStats() {
     },
     {
       label: "Views per month",
-      value: await getInteractionsPerMonth(supabase, totalViews),
+      value: await getViewsPerMonth(supabase, totalViews),
       unit: "views"
     },
     {
       label: "Views this month",
-      value: await getInteractionsLastMonth(supabase),
+      value: await getViewsLastMonth(supabase),
       unit: "views"
     },
     {
       label: "Views per week",
-      value: await getInteractionsPerWeek(supabase, totalViews),
+      value: await getViewsPerWeek(supabase, totalViews),
       unit: "views"
     },
     {
       label: "Views this week",
-      value: await getInteractionsLastWeek(supabase),
+      value: await getViewsLastWeek(supabase),
       unit: "views"
     },
     {
       label: "Views per day",
-      value: await getInteractionsPerDay(supabase, totalViews),
+      value: await getViewsPerDay(supabase, totalViews),
       unit: "views"
     },
     {
       label: "Views today",
-      value: await getInteractionsLastDay(supabase),
+      value: await getViewsLastDay(supabase),
       unit: "views"
     },
     {
