@@ -51,7 +51,7 @@ export async function getInteractionsPerDay(supabase: SupabaseClient<Database>, 
 
     const date = new Date(data.created_at);
 
-    return totalInteractions / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+    return totalInteractions / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export async function getInteractionsLastDay(supabase: SupabaseClient<Database>): Promise<number> {
@@ -81,7 +81,7 @@ export async function getInteractionsPerWeek(supabase: SupabaseClient<Database>,
 
     const date = new Date(data.created_at);
 
-    return totalInteractions / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7);
+    return totalInteractions / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7));
 }
 
 export async function getInteractionsLastWeek(supabase: SupabaseClient<Database>): Promise<number> {
@@ -111,7 +111,7 @@ export async function getInteractionsPerMonth(supabase: SupabaseClient<Database>
 
     const date = new Date(data.created_at);
 
-    return totalInteractions / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    return totalInteractions / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
 }
 
 export async function getInteractionsLastMonth(supabase: SupabaseClient<Database>): Promise<number> {
@@ -141,7 +141,7 @@ export async function getViewsPerMonth(supabase: SupabaseClient<Database>, total
 
     const date = new Date(data.created_at);
 
-    return totalViews / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    return totalViews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
 }
 
 export async function getViewsLastMonth(supabase: SupabaseClient<Database>): Promise<number> {
@@ -171,7 +171,7 @@ export async function getViewsPerWeek(supabase: SupabaseClient<Database>, totalV
 
     const date = new Date(data.created_at);
 
-    return totalViews / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7);
+    return totalViews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7));
 }
 
 export async function getViewsLastWeek(supabase: SupabaseClient<Database>): Promise<number> {
@@ -201,7 +201,7 @@ export async function getViewsPerDay(supabase: SupabaseClient<Database>, totalVi
 
     const date = new Date(data.created_at);
 
-    return totalViews / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+    return totalViews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export async function getViewsLastDay(supabase: SupabaseClient<Database>): Promise<number> {
@@ -231,7 +231,7 @@ export async function getNewsPerWeek(supabase: SupabaseClient<Database>, totalNe
 
     const date = new Date(data.created_at);
 
-    return totalNews / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7);
+    return totalNews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 7));
 }
 
 export async function getNewsPerMonth(supabase: SupabaseClient<Database>, totalNews: number): Promise<number> {
@@ -248,7 +248,7 @@ export async function getNewsPerMonth(supabase: SupabaseClient<Database>, totalN
 
     const date = new Date(data.created_at);
 
-    return totalNews / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    return totalNews / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
 }
 
 export async function getNewsLastWeek(supabase: SupabaseClient<Database>): Promise<number> {

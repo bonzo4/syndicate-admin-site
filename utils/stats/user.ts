@@ -3,7 +3,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 export async function getUserCount(supabase: SupabaseClient<Database>): Promise<number> {
     const { count, error } = await supabase
-        .from("discord_users")
+        .from("users")
         .select("id", { count: 'exact' });
 
     if (error || !count) {
@@ -27,7 +27,7 @@ export async function getUsersPerDay(supabase: SupabaseClient<Database>, totalUs
     
     const date = new Date(data.created_at);
 
-    return totalUsers / (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+    return totalUsers / Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export async function getUsersLastDay(supabase: SupabaseClient<Database>): Promise<number> {
