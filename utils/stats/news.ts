@@ -4,8 +4,8 @@ import { SupabaseClient } from "@supabase/supabase-js";
 export async function getNewsCount(supabase: SupabaseClient<Database>): Promise<number> {
     const { count, error } = await supabase
         .from("news_metrics")
-        .select("id", { count: 'exact' })
-        .lt("interactions", 10);
+        .select("news_id", { count: 'exact' })
+        .gt("interactions", 10);
     
     if (error || !count) {
         return 0;
