@@ -6,6 +6,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
 import { NewsErrorList } from "@/components/lists/NewsErrorList"
 import { NewsInteractionsList } from "@/components/lists/NewsInteractionList"
+import { NewsGuildsList } from "@/components/lists/NewsGuildsList"
 
 export default async function GuildInfoPage({ params }: { params: { id: number } }) {
   
@@ -45,6 +46,10 @@ export default async function GuildInfoPage({ params }: { params: { id: number }
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold text-white">Bot Errors</h1>
           <NewsErrorList newsId={news.id} />
+        </div>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold text-white">Guilds</h1>
+          < NewsGuildsList newsId={news.id} />
         </div>
       </div>
     </div>

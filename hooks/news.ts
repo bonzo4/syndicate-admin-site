@@ -138,3 +138,98 @@ export const useNewsInteractions = (supabase: SupabaseClient<Database>, newsId: 
     }, [supabase, from, to]);
     return interactions;
 }
+
+type NewsGuild = {
+    interactions: number;
+    views: number;
+} & Database["public"]["Tables"]["guilds"]["Row"];
+
+export const useNewsGuildList = (supabase: SupabaseClient<Database>, newsId: number, page: number, search: string): NewsGuild[] => {
+    const { from, to } = getPagination(page, 10);
+    const [guilds, setGuilds] = useState<NewsGuild[]>([]);
+
+    useEffect(() => {
+        const fetchGuilds = async () => {
+
+            if (search) {
+                const { data, error } = await supabase
+                    .from("guilds")
+                    .select("*")
+                    .order("created_at", { ascending: false })
+                    .textSearch("name", search, { config: "english" })
+                    .range(from, to);
+                
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+
+                if (data) {
+                    setGuilds(await Promise.all(data.map(async (guilds) => {
+                        return {
+                            ...guilds,
+                            interactions: await getGuildInteractionsByNews(supabase, newsId, guilds.id),
+                            views: await getGuildViewsByNews(supabase, newsId, guilds.id)
+                        }
+                    })));
+                    return;
+                }
+            }
+
+            const { data, error } = await supabase
+                .from("guilds")
+                .select("*")
+                .order("created_at", { ascending: false })
+                .range(from, to);
+            
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            if (data) {
+                setGuilds(await Promise.all(data.map(async (guilds) => {
+                    return {
+                        ...guilds,
+                        interactions: await getGuildInteractionsByNews(supabase, newsId, guilds.id),
+                        views: await getGuildViewsByNews(supabase, newsId, guilds.id)
+                    }
+                })));
+            }
+        };
+        fetchGuilds();
+    }, [supabase, from, to]);
+    return guilds;
+}
+
+export async function getGuildViewsByNews(supabase: SupabaseClient<Database>, newsId: number, guildId: string): Promise<number> {
+    const { count, error } = await supabase
+        .from("views")
+        .select("*", { count: "exact" })
+        .eq("news_id", newsId)
+        .eq("guild_id", guildId);
+    
+    if (error || !count) {
+        console.log(error);
+        return 0 ;
+    }
+
+    return count
+}
+
+export async function getGuildInteractionsByNews(supabase: SupabaseClient<Database>, newsId: number, guildId: string): Promise<number> {
+    const { count, error } = await supabase
+        .from("interactions")
+        .select("*", { count: "exact" })
+        .eq("news_id", newsId)
+        .eq("guild_id", guildId);
+    
+    if (error || !count) {
+        console.log(error);
+        return 0;
+    }
+
+    return count
+}   
+
+
