@@ -17,16 +17,21 @@ type NewsCardProps = {
 }
 
 export function NewsPreview({ news }: NewsCardProps) {
+
+  const date = new Date()
+
   return (
-    <div className=' flex flex-row drop-shadow-xl justify-between rounded-lg bg-[#FAFAFF] text-black overflow-hidden'>
-      <div className='flex flex-col py-2 pl-4 pr-4 grow'>
-        <p className="text-[8px]">{new Date().toISOString().split('T')[0].replaceAll('-','/')}</p>
+    <div className=' flex flex-row drop-shadow-xl justify-between rounded-lg overflow-hidden bg-cardWhite'>
+      <div className='flex flex-col py-2 pl-4 pr-4 space-y-1'>
+        <p className="text-[12px]">{date.getMonth()}/{date.getDate()}/{date.getFullYear()}</p>
         <h1 className="text-[18px] font-bold">{news.title}</h1>
         <p className="text-[14px]">{news.slug}</p>
-        <div className="flex flex-row  justify-between">
+        <div className="flex flex-row justify-between">
           <div className="flex flex-row space-x-2">
             {news.tags.map((tag) => (
-              <p className="bg-[#DADADA] px-2 py-1 text-[10px] rounded-full">{tag}</p>
+              <div className="bg-[#DADADA] px-2 py-1 rounded-full">
+                {tag}
+              </div>
             ))}
           </div>
           <div className="flex flex-row space-x-1 my-auto">
@@ -42,8 +47,8 @@ export function NewsPreview({ news }: NewsCardProps) {
           </div>
         </div>
       </div>
-      {news.thumbnail && <div className="bg-black rounded-lg overflow-hidden hidden lg:flex">
-        <Image src={news.thumbnail} alt="news" width={200} height={88} />
+      {news.thumbnail && <div className="bg-black hidden lg:flex min-w-[200px] relative">
+        <Image src={news.thumbnail} alt="news" fill objectFit="cover" />
       </div>}
     </div>
   );
