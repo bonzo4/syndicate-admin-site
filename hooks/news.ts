@@ -59,6 +59,41 @@ export const useNewsList = (supabase: SupabaseClient<Database>, page: number, se
     return news;
 }
 
+type NewsPreview = {
+    newsPreview: Database["public"]["Tables"]["news_previews"]["Row"] | null;
+} & NewsDoc
+
+export const usePreviewsList = (supabase: SupabaseClient<Database>, page: number) => {
+    const { from, to } = getPagination(page, 10);
+    const [news, setNews] = useState<NewsPreview[]>([]);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            const { data, error } = await supabase
+                .from("discord_news")
+                .select("*, tags(*), news_previews(*)")
+                .order("created_at", { ascending: false })
+                .range(from, to);
+            
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            if (data) {
+                setNews(data.map((news) => ({
+                    ...news,
+                    tags: news.tags.map((tag) => tag.name),
+                    newsPreview: news.news_previews[0]
+                })));
+            }
+        };
+        fetchNews();
+    }, [supabase, from, to]);
+    return news ;
+}
+            
+
 type NewsErrors = {
     guildName?: string;
 } & Database["public"]["Tables"]["bot_errors"]["Row"];
