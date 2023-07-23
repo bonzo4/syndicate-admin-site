@@ -41,7 +41,7 @@ export function PreviewList() {
               <td className="border px-4 py-2">{new Date(news.schedule).toLocaleTimeString()}</td>
               <td className="border px-4 py-2">{news.tags.map((tag) => (tag))}</td>
               <td className="border px-4 py-2">{
-                news.newsPreview && news.newsPreview.title && news.newsPreview.slug && news.newsPreview.thumbnail && news.newsPreview.tags ? '✅' : '❌'
+                news.newsPreview && news.newsPreview.title && news.newsPreview.slug && news.newsPreview.thumbnail ? '✅' : '❌'
               }</td>
               <td className="border px-4 py-2 underline hover:no-underline"><Link href={`/dashboard/preview/${news.id}`}>Create a Preview</Link></td>
             </tr>
