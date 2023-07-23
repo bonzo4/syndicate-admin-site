@@ -21,7 +21,7 @@ export function NewsPreview({ news }: NewsCardProps) {
   const date = new Date()
 
   return (
-    <div className='bg-white flex flex-row drop-shadow-xl justify-between rounded-lg overflow-hidden bg-cardWhite'>
+    <div className=' text-black flex flex-row drop-shadow-xl justify-between rounded-lg overflow-hidden bg-white'>
       <div className='flex flex-col py-2 pl-4 pr-4 space-y-1 w-full'>
         <p className="text-[12px]">{date.getMonth()}/{date.getDate()}/{date.getFullYear()}</p>
         <h1 className="text-[20px] font-bold">{news.title}</h1>
