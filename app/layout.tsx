@@ -2,7 +2,6 @@ import { Header } from '@/components/layout/Header'
 import './globals.css'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 export const metadata = {
   title: 'Create Next App',
