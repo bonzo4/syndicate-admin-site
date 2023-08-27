@@ -174,6 +174,43 @@ export const useNewsInteractions = (supabase: SupabaseClient<Database>, newsId: 
     return interactions;
 }
 
+export const useLinkClicks = (supabase: SupabaseClient<Database>, newsId: number, page: number): NewsInteractions[] => {
+    const { from, to } = getPagination(page, 10);
+
+    const [interactions, setInteractions] = useState<NewsInteractions[]>([]);
+
+    useEffect(() => {
+        const fetchInteractions = async () => {
+
+            const { data, error } = await supabase
+                .from("interactions")
+                .select("*, discord_users(*), quiz_choices(*), poll_choices(*), guilds(name)")
+                .eq("news_id", newsId)
+                .neq("redirect_id", null)
+                .order("created_at", { ascending: false })
+                .range(from, to);
+            
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            if (data) {
+                setInteractions(data.map((interactions) => {
+                    return {
+                        ...interactions,
+                        user: interactions.discord_users,
+                        choice: interactions.quiz_choices || interactions.poll_choices,
+                        guildName: interactions.guilds?.name || ""
+                    }
+                }));
+            }
+        };
+        fetchInteractions();
+    }, [supabase, from, to]);
+    return interactions;
+}
+
 type NewsGuild = {
     interactions: number;
     views: number;

@@ -1,13 +1,13 @@
 'use client';
 
-import { useViewIntervals } from "@/hooks/intervals/views";
+import { useTagViewIntervals } from "@/hooks/intervals/views";
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {  useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 import { CategoryScale, Chart as ChartJs, Legend, LineElement, LinearScale, PointElement, Title, Tooltip, BarElement} from 'chart.js'
-import { useInteractionIntervals } from "@/hooks/intervals/interactions";
+import { useTagInteractionIntervals } from "@/hooks/intervals/interactions";
 
 ChartJs.register(
   BarElement,
@@ -20,30 +20,30 @@ ChartJs.register(
   Legend
 );
 
-type ViewsAndInteractionsGraphProps = {
-  newsId?: number
+type TagsViewsAndInteractionsGraphProps = {
+  tag: string
 }
 
-export function ViewsAndInteractionsGraph({newsId}: ViewsAndInteractionsGraphProps) {
+export function TagViewsAndInteractionsGraph({tag}: TagsViewsAndInteractionsGraphProps) {
 
   const supabase = createClientComponentClient<Database>()
 
   const [interval, setInterval] = useState<number>(24)
 
-  const viewIntervals = useViewIntervals({
+  const viewIntervals = useTagViewIntervals({
     supabase,
     hours: interval,
-    newsId
+    tag
   })
 
-  const interactionIntervals = useInteractionIntervals({
+  const interactionIntervals = useTagInteractionIntervals({
     supabase,
     hours: interval,
-    newsId
+    tag
   })
 
   return (
-    <div className="flex flex-col items-center py-2 grow w-full">
+    <div className="flex flex-col items-center py-2 grow w-[80%]">
       <div className="animate-in flex flex-row opacity-0 text-foreground space-x-10 w-full grow">
         <div className="flex flex-col items-center space-y-2 w-full grow">
           <div className="flex flex-row items-center space-x-2">

@@ -37,7 +37,7 @@ export const useCountStats = (supabase: SupabaseClient<Database>, table: string,
     return countStats;
 }
 
-export const useCountStatsByNews = (supabase: SupabaseClient<Database>,newsId: number, table: string,  idName: string = "id"): Stats => {
+export const useCountStatsByNews = (supabase: SupabaseClient<Database>, newsId: number, table: string,  idName: string = "id"): Stats => {
     const [countStats, setCountStats] = useState<Stats>({
         value: 0,
         change: 0

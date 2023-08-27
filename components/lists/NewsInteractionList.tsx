@@ -1,13 +1,10 @@
 "use client"
 
-import { useGuildErrors, useGuildList } from "@/hooks/guilds"
 import { Database } from "@/types"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
 import { useState } from "react"
 import { useNewsInteractions } from "@/hooks/news"
-import Image from "next/image"
-
 type NewsInteractionsListProps = {
   newsId: number
 }

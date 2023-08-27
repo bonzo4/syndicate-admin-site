@@ -17,6 +17,9 @@ export function Sidebar() {
           <Link href="/dashboard/news" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
               News Manager
           </Link>
+          <Link href="/dashboard/tags" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
+              Vanity Tags
+          </Link>
           <Link href="/dashboard/preview" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
             Preview Manager
           </Link>

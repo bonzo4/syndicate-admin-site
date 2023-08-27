@@ -41,8 +41,8 @@ export function NewsList() {
                 </h1>
               </td>
               <td className="border px-4 py-2">{news.approved ? "Yes" : "No"}</td>
-              <td className="border px-4 py-2">{new Date(news.created_at).toLocaleTimeString()}</td>
-              <td className="border px-4 py-2">{new Date(news.schedule).toLocaleTimeString()}</td>
+              <td className="border px-4 py-2">{new Date(news.created_at).toLocaleString()}</td>
+              <td className="border px-4 py-2">{new Date(news.schedule).toLocaleString()}</td>
               <td className="border px-4 py-2">{news.tags.map((tag) => (tag))}</td>
               <td className="border px-4 py-2 underline hover:no-underline"><Link href={`/dashboard/news/${news.id}`}>View</Link></td>
             </tr>
