@@ -64,6 +64,10 @@ export function PreviewForm({ id, clicks, inputs }: PreviewFormProps) {
     setTag("")
   }
 
+  const removeTag = (tag: string) => {
+    setTags(tags.filter(t => t !== tag))
+  }
+
   return (
     <div className="flex flex-col space-y-10">
       <form className="flex flex-col space-y-2" onSubmit={addTag}>
@@ -95,8 +99,8 @@ export function PreviewForm({ id, clicks, inputs }: PreviewFormProps) {
         thumbnail,
         tags,
         clicks,
-        inputs
-      }} />
+        inputs,
+      }} removeTag={removeTag} />
     </div>
   );
 }

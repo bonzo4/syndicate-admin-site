@@ -28,17 +28,12 @@ export function useGuildInteractionCounts({newsId, supabase}: useGuildInteractio
                 }
                 console.log(data);
             if (data) {
-                const guilds = data.filter((guild) => guild.interaction_count > 3);
-                const otherGuilds = data.filter((guild) => guild.interaction_count <= 3);
+                const guilds = data;
                     setGuildInteractions([...guilds.map((guild) => ({
                         guildId: guild.guild_id,
                         guildName: guild.guild_name,
                         interactions: guild.interaction_count
-                    })), {
-                        guildId: "other",
-                        guildName: "Other",
-                        interactions: otherGuilds.reduce((acc, curr) => acc + curr.interaction_count, 0)
-                    }]);
+                    }))]);
                 }
         };
         fetchInteractionIntervals();

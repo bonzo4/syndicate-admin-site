@@ -13,10 +13,10 @@ type NewsCardProps = {
     clicks: number
     inputs: number
   }
-  
+  removeTag: (tag: string) => void
 }
 
-export function NewsPreview({ news }: NewsCardProps) {
+export function NewsPreview({ news, removeTag }: NewsCardProps) {
 
   const date = new Date()
 
@@ -31,6 +31,7 @@ export function NewsPreview({ news }: NewsCardProps) {
             {news.tags.map((tag) => (
               <div className="bg-[#DADADA] px-2 py-1 rounded-full">
                 {tag}
+                <button onClick={() => removeTag(tag)} className="ml-1 text-[12px]">x</button>
               </div>
             ))}
           </div>
