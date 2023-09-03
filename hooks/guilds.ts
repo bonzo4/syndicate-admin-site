@@ -80,7 +80,6 @@ export const useGuildErrors = (supabase: SupabaseClient<Database>, guildId: stri
             }
 
             if (data) {
-                console.log(data)
                 setErrors(data);
             }
         };

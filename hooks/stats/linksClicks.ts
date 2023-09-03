@@ -10,7 +10,6 @@ export const useLinkClicksCount = (supabase: SupabaseClient<Database>, newsId: n
             const { data, error } = await supabase
                 .rpc("get_link_clicks", { news_doc_id: newsId });
             
-            console.log(data)
             
             if (error || !data) {
                 return;

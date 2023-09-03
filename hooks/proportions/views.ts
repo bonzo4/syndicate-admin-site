@@ -26,7 +26,6 @@ export function useGuildViewCounts({newsId, supabase}: useGuildViewCountsOptions
                     console.log(error);
                     return;
                 }
-                console.log(data);
             if (data) {
                 const guilds = data.filter((guild) => guild.view_count > 5);
                 const otherGuilds = data.filter((guild) => guild.view_count <= 5);

@@ -9,14 +9,15 @@ import { useLinkClicksCount } from "@/hooks/stats/linksClicks";
 
 type IndividualNewsStatsProps = {
   newsId: number
-  tags: string[]
+  tags: string[],
+  stopDate: Date
 }
 
-export function IndividualNewsStats({newsId, tags}: IndividualNewsStatsProps) {
+export function IndividualNewsStats({newsId, tags, stopDate}: IndividualNewsStatsProps) {
 
   const supabase = createClientComponentClient<Database>()
   const views = useCountStatsByNews(supabase, newsId, "views");
-  const primeViews = usePrimeViews(supabase, newsId, tags);
+  const primeViews = usePrimeViews(supabase, newsId, tags, stopDate);
   const interactions = useCountStatsByNews(supabase, newsId, "interactions")
   const linkClicks = useLinkClicksCount(supabase, newsId);
   const errors = useCountStatsByNews(supabase, newsId, "bot_errors");

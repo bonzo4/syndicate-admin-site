@@ -26,7 +26,6 @@ export function useGuildInteractionCounts({newsId, supabase}: useGuildInteractio
                     console.log(error);
                     return;
                 }
-                console.log(data);
             if (data) {
                 const guilds = data;
                     setGuildInteractions([...guilds.map((guild) => ({

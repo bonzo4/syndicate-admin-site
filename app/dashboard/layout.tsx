@@ -36,7 +36,7 @@ export default async function RootLayout({
   return (
     <main className="bg-background grow flex flex-row w-full h-fill">
       <Sidebar />
-      <div className="w-full flex flex-col ">
+      <div className="w-full flex flex-col items-center justify-center">
         {children}
       </div>  
     </main>

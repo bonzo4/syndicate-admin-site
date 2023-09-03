@@ -8,19 +8,26 @@ type ViewInterval = {
 }
 
 type useViewIntervalOptions = {
-    hours: number;
+    rangeType: "days" | "months" | "years";
+    range: number;
     newsId?: number;
+    endDate: Date;
     supabase: SupabaseClient<Database>;
 }
 
-export function useViewIntervals({hours, newsId, supabase}: useViewIntervalOptions): ViewInterval[] {
+export function useViewIntervals({rangeType, range, newsId, supabase, endDate}: useViewIntervalOptions): ViewInterval[] {
     const [viewIntervals, setViewIntervals] = useState<ViewInterval[]>([]);
 
     useEffect(() => {
         const fetchViewIntervals = async () => {
-            if (newsId) {
-                const { data, error } = await supabase
-                    .rpc("get_news_views_intervals", { hours_range: hours, news_doc_id: newsId });
+            console.log(endDate?.toTimeString())
+            const { data, error } = await supabase
+                .rpc("get_view_graph", {
+                    range_type: rangeType,
+                    range: range,
+                    news_doc_id: newsId,
+                    end_date: endDate.toISOString()
+                });
 
                 if (error) {
                     console.log(error);
@@ -28,28 +35,13 @@ export function useViewIntervals({hours, newsId, supabase}: useViewIntervalOptio
                 }
                 if (data) {
                     setViewIntervals(data.map((interval) => ({
-                        interval: interval.hour_segment,
+                        interval: interval.time_segment,
                         views: interval.document_count
                     })));
                 }
-                return;
-            }
-            const { data, error } = await supabase
-                .rpc("get_view_intervals", { hours_range: hours });
-
-            if (error) {
-                console.log(error);
-                return;
-            }
-            if (data) {
-                setViewIntervals(data.map((interval) => ({
-                    interval: interval.hour_segment,
-                    views: interval.document_count
-                })));
-            }
         };
         fetchViewIntervals();
-    }, [supabase, hours]);
+    }, [supabase, rangeType, range, newsId, endDate]);
 
     return viewIntervals;
 }

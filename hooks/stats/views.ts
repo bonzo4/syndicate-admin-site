@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Stats } from "./stats";
 
 
-export const usePrimeViews = (supabase: SupabaseClient<Database>, newsId: number, tags: string[]): Stats => {
+export const usePrimeViews = (supabase: SupabaseClient<Database>, newsId: number, tags: string[], stopDate: Date): Stats => {
     const [countStats, setCountStats] = useState<Stats>({
         value: 0,
         change: 0
@@ -12,20 +12,6 @@ export const usePrimeViews = (supabase: SupabaseClient<Database>, newsId: number
 
     useEffect(() => {
         const getCount = async () => {
-            let stopDate = new Date()
-            const { data: nextNews, error: error1 } = await supabase
-                .from("_news_tags")
-                .select("news_id, discord_news(schedule)")
-                .in("tag", tags)
-                .gt("news_id", newsId)
-                .limit(tags.length)
-        
-            // check if nextNews has the same news_ids
-            const sameIds = nextNews && nextNews.length === tags.length  && nextNews.every((news) => news.news_id === nextNews[0].news_id)
-            
-            if (!error1 && nextNews[0] && nextNews[0].discord_news && sameIds) {
-                stopDate = new Date(nextNews[0].discord_news.schedule)
-            }
             const { count, error } = await supabase
                 .from("views")
                 .select("id", { count: 'exact' })

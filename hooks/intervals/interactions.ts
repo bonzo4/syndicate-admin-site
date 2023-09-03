@@ -8,19 +8,25 @@ type InteractionInterval = {
 }
 
 type useInteractionIntervalOptions = {
-    hours: number;
-    supabase: SupabaseClient<Database>;
+    rangeType: "days" | "months" | "years";
+    range: number;
+    endDate: Date;
     newsId?: number;
+    supabase: SupabaseClient<Database>;
 }
 
-export function useInteractionIntervals({hours, supabase, newsId}: useInteractionIntervalOptions): InteractionInterval[] {
+export function useInteractionIntervals({rangeType, range, supabase, newsId, endDate}: useInteractionIntervalOptions): InteractionInterval[] {
     const [interactionIntervals, setInteractionIntervals] = useState<InteractionInterval[]>([]);
 
     useEffect(() => {
         const fetchInteractionIntervals = async () => {
-            if (newsId) {
-                const { data, error } = await supabase
-                    .rpc("get_news_interactions_intervals", { hours_range: hours, news_doc_id: newsId });
+            const { data, error } = await supabase
+                    .rpc("get_interaction_graph", {
+                        range_type: rangeType,
+                        range: range,
+                        news_doc_id: newsId,
+                        end_date: endDate?.toISOString() 
+                    });
                 
                 if (error) {
                     console.log(error);
@@ -29,28 +35,13 @@ export function useInteractionIntervals({hours, supabase, newsId}: useInteractio
 
                 if (data) {
                     setInteractionIntervals(data.map((interval) => ({
-                        interval: interval.hour_segment,
+                        interval: interval.time_segment,
                         interactions: interval.document_count
                     })));
                 }
-                return;
-            }
-            const { data, error } = await supabase
-                .rpc("get_interaction_intervals", { hours_range: hours });
-
-            if (error) {
-                console.log(error);
-                return;
-            }
-            if (data) {
-                setInteractionIntervals(data.map((interval) => ({
-                    interval: interval.hour_segment,
-                    interactions: interval.document_count
-                })));
-            }
         };
         fetchInteractionIntervals();
-    }, [supabase, hours]);
+    }, [supabase, rangeType, range, newsId, endDate]);
 
     return interactionIntervals;
 }

@@ -1,16 +1,16 @@
 'use client';
 
-import { useViewIntervals } from "@/hooks/intervals/views";
+import { useGuildIntervals } from "@/hooks/intervals/guilds";
+
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {  useState } from "react";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 import { CategoryScale, Chart as ChartJs, Legend, LineElement, LinearScale, PointElement, Title, Tooltip, BarElement} from 'chart.js'
-import { useInteractionIntervals } from "@/hooks/intervals/interactions";
+import { useUserIntervals } from "@/hooks/intervals/users";
 
 ChartJs.register(
-  BarElement,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -20,44 +20,25 @@ ChartJs.register(
   Legend
 );
 
-type ViewsAndInteractionsGraphProps = {
-  newsId?: number
-  stopDate?: Date
-}
-
-export function ViewsAndInteractionsGraph({newsId, stopDate}: ViewsAndInteractionsGraphProps) {
+export default function GuildAndUserGraph() {
 
   const supabase = createClientComponentClient<Database>()
 
   const [rangeType, setRangeType] = useState<'days' | 'months' | 'years'>('days')
   const [range, setRange] = useState<number>(1)
-  const [prime, setPrime] = useState<boolean>(false)
-  const [endDate, setEndDate] = useState<Date>(new Date())
 
-  const viewIntervals = useViewIntervals({
-    supabase,
+  const guildIntervals = useGuildIntervals({
     rangeType,
     range,
-    newsId,
-    endDate
+    supabase
   })
 
-  const interactionIntervals = useInteractionIntervals({
-    supabase,
+  const userIntervals = useUserIntervals({
     rangeType,
     range,
-    newsId,
-    endDate
+    supabase
   })
 
-  const onPrimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrime(e.target.checked)
-    if (e.target.checked) {
-      setEndDate(stopDate || new Date())
-    } else {
-      setEndDate(new Date())
-    }
-  }
 
   return (
     <div className="flex flex-col items-center py-2 grow w-full">
@@ -72,19 +53,16 @@ export function ViewsAndInteractionsGraph({newsId, stopDate}: ViewsAndInteractio
             <input type="radio" name="rangeType" value="years" checked={rangeType === 'years'} onChange={() => setRangeType('years')} />
             <span className="text-foreground">Years</span>
             <input type="number" value={range} onChange={(e) => setRange(parseInt(e.target.value))} className="w-16 px-2 py-1 rounded-md bg-background text-foreground border" />
-            <input type="checkbox" checked={prime} onChange={onPrimeChange} />
-            <span className="text-foreground">Prime</span>
           </div>
-          <Bar
+          <Line
             data={{
-            labels: viewIntervals.map((interval) => new Date(interval.interval).toLocaleString()),
+            labels: guildIntervals.map((interval) => new Date(interval.interval).toLocaleString()),
             datasets: [
               {
-                label: 'Views',
-                data: viewIntervals.map((interval) => interval.views),
+                label: 'Guilds',
+                data: guildIntervals.map((interval) => interval.guilds),
                 backgroundColor: '#F87171',
                 borderColor: '#F87171',
-                barThickness: 6,
               },
             ],
           }} options={{
@@ -94,16 +72,16 @@ export function ViewsAndInteractionsGraph({newsId, stopDate}: ViewsAndInteractio
               }
             }
             }} />
-          <Bar
+          <Line
             data={{
-            labels: interactionIntervals.map((interval) => new Date(interval.interval).toLocaleString()),
+            labels: userIntervals.map((interval) => new Date(interval.interval).toLocaleString()),
             datasets: [
               {
-                label: 'Interactions',
-                data: interactionIntervals.map((interval) => interval.interactions),
+                label: 'Users',
+                data: userIntervals.map((interval) => interval.users),
+                // blue
                 backgroundColor: '#60A5FA',
                 borderColor: '#60A5FA',
-                barThickness: 6,
               },
             ],
           }} options={{
@@ -112,7 +90,7 @@ export function ViewsAndInteractionsGraph({newsId, stopDate}: ViewsAndInteractio
                 beginAtZero: true
               }
             }
-          }} />
+            }} />
         </div>
       </div>
     </div>
