@@ -28,7 +28,7 @@ export function useUserIntervals({ rangeType, range, supabase }: useUserInterval
                 console.log(error);
                 return;
             }
-
+            console.log(data)
             if (data) {
                 setUserIntervals(data.map((interval) => ({
                     interval: interval.time_segment,

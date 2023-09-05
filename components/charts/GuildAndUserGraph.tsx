@@ -4,7 +4,7 @@ import { useGuildIntervals } from "@/hooks/intervals/guilds";
 
 import { Database } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 
 import { CategoryScale, Chart as ChartJs, Legend, LineElement, LinearScale, PointElement, Title, Tooltip, BarElement} from 'chart.js'
@@ -25,7 +25,9 @@ export default function GuildAndUserGraph() {
   const supabase = createClientComponentClient<Database>()
 
   const [rangeType, setRangeType] = useState<'days' | 'months' | 'years'>('days')
+  const [labels, setLabels] = useState<string[]>([])
   const [range, setRange] = useState<number>(1)
+
 
   const guildIntervals = useGuildIntervals({
     rangeType,
@@ -38,6 +40,34 @@ export default function GuildAndUserGraph() {
     range,
     supabase
   })
+
+  // useEffect(() => {
+  //   const labels: string[] = []
+  //   const startDate = new Date(guildIntervals[0].interval)
+  //   const endDate = new Date(guildIntervals[guildIntervals.length - 1].interval)
+  //   if (rangeType === 'days') {
+  //     const currentDate = startDate
+  //     const currentHour = currentDate.setMinutes(0, 0)
+  //     while (currentHour <= endDate.getTime()) {
+  //       labels.push(new Date(currentDate).toLocaleString())
+  //       currentDate.setHours(currentDate.getHours() + 1)
+  //     }
+  //   } else if (rangeType === 'months') {
+  //     const currentDate = startDate
+  //     while (currentDate <= endDate) {
+  //       labels.push(new Date(currentDate).toLocaleString())
+  //       currentDate.setDate(currentDate.getDate() + 1)
+  //     }
+  //   } else if (rangeType === 'years') {
+  //     const currentDate = startDate
+  //     while (currentDate <= endDate) {
+  //       const monthString = currentDate.toLocaleString('default', { month: 'long' })
+  //       labels.push(`${monthString} ${currentDate.getFullYear()}`)
+  //       currentDate.setMonth(currentDate.getMonth() + 1)
+  //     }
+  //   }
+  //   setLabels(labels)
+  // }, [rangeType, guildIntervals])
 
 
   return (
