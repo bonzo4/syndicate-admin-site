@@ -14,6 +14,9 @@ export function Sidebar() {
           <Link href="/dashboard/guild" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
               Guild Manager
           </Link>
+          <Link href="/dashboard/referrals" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
+              Referrals
+          </Link>
           <Link href="/dashboard/news" className="text-foreground hover:text-foreground/80 transition-colors duration-200">
               News Manager
           </Link>

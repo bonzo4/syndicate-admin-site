@@ -76,3 +76,42 @@ export function useTagViewIntervals({hours, tag, supabase}: useTagViewIntervalOp
 
     return viewIntervals;
 }
+
+export const usePrimeViews = (supabase: SupabaseClient<Database>, days: number): ViewInterval[] => {
+    const [viewIntervals, setViewIntervals] = useState<ViewInterval[]>([]);
+
+    useEffect(() => {
+        const fetchViewIntervals = async () => {
+            const { data, error } = await supabase
+                .rpc("get_prime_graph", { days });
+
+            if (error) {
+                console.log(error);
+                return;
+            }
+            if (data) {
+                const groupedIntervals: { [key: string]: ViewInterval[] } = {};
+                data.forEach((interval) => {
+                    const day = interval.news_schedule.split('T')[0]; // Extract the date portion
+                    if (!groupedIntervals[day]) {
+                        groupedIntervals[day] = [];
+                    }
+                    groupedIntervals[day].push({
+                        interval: interval.news_schedule,
+                        views: interval.view_count
+                    });
+                });
+
+                const averagedIntervals = Object.values(groupedIntervals).map((intervals) => ({
+                    interval: intervals[0].interval, // Use the date from the first interval in the group
+                    views: intervals.reduce((total, interval) => total + interval.views, 0) / intervals.length,
+                }));
+
+                setViewIntervals(averagedIntervals);
+            }
+        };
+        fetchViewIntervals();
+    }, [supabase, days]);
+
+    return viewIntervals;
+}

@@ -53,7 +53,7 @@ type useTagViewIntervalOptions = {
 }
 
 export function useTagInteractionIntervals({hours, tag, supabase}: useTagViewIntervalOptions): InteractionInterval[] {
-    const [viewIntervals, setViewIntervals] = useState<InteractionInterval[]>([]);
+    const [interactionIntervals, setViewIntervals] = useState<InteractionInterval[]>([]);
 
     useEffect(() => {
         const fetchViewIntervals = async () => {
@@ -74,5 +74,44 @@ export function useTagInteractionIntervals({hours, tag, supabase}: useTagViewInt
         fetchViewIntervals();
     }, [supabase, hours, tag]);
 
-    return viewIntervals;
+    return interactionIntervals;
+}
+
+export const useEngagementIntervals = (supabase: SupabaseClient<Database>, days: number): InteractionInterval[] => {
+    const [interactionIntervals, setViewIntervals] = useState<InteractionInterval[]>([]);
+
+    useEffect(() => {
+        const fetchViewIntervals = async () => {
+            const { data, error } = await supabase
+                .rpc("get_engagement_graph", { days });
+
+            if (error) {
+                console.log(error);
+                return;
+            }
+            if (data) {
+                const groupedIntervals: { [key: string]: InteractionInterval[] } = {};
+                data.forEach((interval) => {
+                    const day = interval.news_schedule.split('T')[0]; // Extract the date portion
+                    if (!groupedIntervals[day]) {
+                        groupedIntervals[day] = [];
+                    }
+                    groupedIntervals[day].push({
+                        interval: interval.news_schedule,
+                        interactions: interval.interaction_count
+                    });
+                });
+
+                const averagedIntervals = Object.values(groupedIntervals).map((intervals) => ({
+                    interval: intervals[0].interval, // Use the date from the first interval in the group
+                    interactions: intervals.reduce((total, interval) => total + interval.interactions, 0) / intervals.length,
+                }));
+
+                setViewIntervals(averagedIntervals);
+            }
+        };
+        fetchViewIntervals();
+    }, [supabase, days]);
+
+    return interactionIntervals;
 }

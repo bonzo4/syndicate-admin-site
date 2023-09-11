@@ -21,6 +21,7 @@ export function IndividualNewsStats({newsId, tags, stopDate}: IndividualNewsStat
   const interactions = useCountStatsByNews(supabase, newsId, "interactions")
   const linkClicks = useLinkClicksCount(supabase, newsId);
   const errors = useCountStatsByNews(supabase, newsId, "bot_errors");
+  const users = useCountStatsByNews(supabase, newsId, "_news_users");
   
   return (
     <div className="flex flex-col items-center py-2">
@@ -29,6 +30,9 @@ export function IndividualNewsStats({newsId, tags, stopDate}: IndividualNewsStat
         <StatsCard name="prime views" value={primeViews.value} change={primeViews.change} />
         <StatsCard name="interactions" value={interactions.value} change={interactions.change} />
         <StatsCard name="link clicks" value={linkClicks} />
+      </div>
+      <div className="animate-in flex flex-row opacity-0 text-foreground space-x-10">
+        <StatsCard name="new users" value={users.value} change={users.change} />
         <StatsCard name="errors" value={errors.value} change={errors.change} />
       </div>
     </div>
