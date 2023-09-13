@@ -24,7 +24,8 @@ export function AmbassadorList({ userId, setUserId }: AmbassadorListProps) {
   };
 
   return (
-    <div className='flex w-full flex-col items-center space-y-2'>
+    <div className='mt-10 flex w-full flex-col items-center space-y-2'>
+      <h1 className='text-3xl font-bold'>Ambassadors</h1>
       <table className='table-auto'>
         <thead>
           <tr>
