@@ -127,6 +127,8 @@ export function useReferralList({
           return;
         }
 
+        console.log(data);
+
         if (data) {
           setReferrals(
             await Promise.all(
@@ -156,7 +158,7 @@ export function useReferralList({
       const { data, error } = await supabase
         .from('guild_referrals')
         .select('*, discord_users(name), guilds(name, member_count)')
-        .neq('user_id', null)
+        .neq('discord_user_id', null)
         .order('created_at', { ascending: false })
         .range(from, to);
 
@@ -233,7 +235,7 @@ export function useAmbassadorList({
               const { data } = await supabase
                 .from('guild_referrals')
                 .select('guild_id')
-                .eq('user_id', ambassador.id);
+                .eq('discord_user_id', ambassador.id);
 
               return {
                 userId: ambassador.id,
