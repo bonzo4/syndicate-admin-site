@@ -20,12 +20,20 @@ export function ReferralList({ userId }: ReferralListProps) {
     userId,
   });
 
+  const handleCheck = async (guildId: string, checked: boolean) => {
+    await supabase
+      .from('guild_referrals')
+      .update({ checked })
+      .eq('guild_id', guildId);
+  };
+
   return (
     <div className='mt-10 flex w-full flex-col items-center space-y-2'>
       <h1 className='text-3xl font-bold'>Guild Referrals</h1>
       <table className='table-auto'>
         <thead>
           <tr>
+            <th className='px-4 py-2'>Audited?</th>
             <th className='px-4 py-2'>Guild</th>
             <th className='px-4 py-2'>User</th>
             <th className='px-4 py-2'>Member Count</th>
@@ -36,6 +44,15 @@ export function ReferralList({ userId }: ReferralListProps) {
         <tbody className=''>
           {referrals.map((referral) => (
             <tr key={referral.guildName}>
+              <td className='border px-4 py-2'>
+                <input
+                  type='checkbox'
+                  checked={referral.checked}
+                  onClick={() =>
+                    handleCheck(referral.guildId, !referral.checked)
+                  }
+                />
+              </td>
               <td className='border px-4 py-2 underline'>
                 <Link href={`guild/${referral.guildId}`}>
                   {referral.guildName}

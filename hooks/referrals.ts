@@ -16,6 +16,7 @@ type Referral = {
   createdAt: Date;
   members: number;
   isSetup: boolean;
+  checked: boolean;
 };
 
 type useReferralListOptions = {
@@ -147,6 +148,7 @@ export function useReferralList({
                   ),
                   members: referral.guilds?.member_count ?? 0,
                   isSetup: Boolean(data?.length),
+                  checked: referral.checked,
                 };
               })
             )
@@ -183,6 +185,7 @@ export function useReferralList({
                 createdAt: new Date(referral.updated_at ?? referral.created_at),
                 members: referral.guilds?.member_count ?? 0,
                 isSetup: Boolean(data?.length),
+                checked: referral.checked,
               };
             })
           )
