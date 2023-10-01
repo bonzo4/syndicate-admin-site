@@ -25,6 +25,9 @@ export function ReferralList({ userId }: ReferralListProps) {
       .from('guild_referrals')
       .update({ checked })
       .eq('guild_id', guildId);
+
+    setPage((prev) => prev + 1);
+    setPage((prev) => prev - 1);
   };
 
   return (
