@@ -54,6 +54,12 @@ export function Sidebar() {
           >
             Metrics
           </Link>
+          <Link
+            href='/dashboard/redirects'
+            className='text-foreground transition-colors duration-200 hover:text-foreground/80'
+          >
+            Redirects
+          </Link>
         </div>
       </div>
     </nav>
