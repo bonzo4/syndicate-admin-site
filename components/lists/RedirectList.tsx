@@ -34,16 +34,22 @@ export function RedirectList() {
     setNewRedirect('');
   };
 
-  const deleteRedirect = async (name: string) => {
+  const deleteRedirect = async (id: number) => {
     const { error } = await supabase
       .from('website_redirects')
       .delete()
-      .eq('name', name);
+      .eq('id', id);
 
     if (error) alert(error.message);
 
-    const index = redirects.findIndex((redirect) => redirect.name === name);
+    const index = redirects.findIndex((redirect) => redirect.id === id);
     redirects.splice(index, 1);
+  };
+
+  const copyRedirect = async (name: string) => {
+    navigator.clipboard.writeText(
+      `https://www.syndicatenetwork.io/api/redirect?name=${name}`
+    );
   };
 
   return (
@@ -67,6 +73,7 @@ export function RedirectList() {
             <th className='px-4 py-2'>Clicks</th>
             <th className='px-4 py-2'>Link</th>
             <th className='px-4 py-2'>Delete</th>
+            <th className='px-4 py-2'>Copy</th>
           </tr>
         </thead>
         <tbody className=''>
@@ -88,8 +95,19 @@ export function RedirectList() {
                 </a>
               </td>
               <td className='border px-4 py-2'>
-                <button className='bg-slate-900 ' onClick={onRedirectSubmit}>
+                <button
+                  className='bg-slate-900 '
+                  onClick={() => deleteRedirect(redirect.id)}
+                >
                   Delete
+                </button>
+              </td>
+              <td className='border px-4 py-2'>
+                <button
+                  className='bg-slate-900'
+                  onClick={() => copyRedirect(redirect.name)}
+                >
+                  Copy
                 </button>
               </td>
             </tr>
