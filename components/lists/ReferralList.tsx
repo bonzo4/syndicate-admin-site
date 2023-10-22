@@ -21,6 +21,14 @@ export function ReferralList({ userId }: ReferralListProps) {
   });
 
   const handleCheck = async (guildId: string, checked: boolean) => {
+    referrals
+      .find((referral) => referral.guildId === guildId)
+      ?.setReferrals(
+        referrals.map((referral) =>
+          referral.guildId === guildId ? { ...referral, checked } : referral
+        )
+      );
+
     await supabase
       .from('guild_referrals')
       .update({ checked })
@@ -40,6 +48,7 @@ export function ReferralList({ userId }: ReferralListProps) {
             <th className='px-4 py-2'>Guild</th>
             <th className='px-4 py-2'>User</th>
             <th className='px-4 py-2'>Member Count</th>
+            <th className='px-4 py-2'>View Count</th>
             <th className='px-4 py-2'>Setup?</th>
             <th className='px-4 py-2'>Created at</th>
           </tr>
@@ -63,6 +72,7 @@ export function ReferralList({ userId }: ReferralListProps) {
               </td>
               <td className='border px-4 py-2'>{referral.userName}</td>
               <td className='border px-4 py-2'>{referral.members}</td>
+              <td className='border px-4 py-2'>{referral.views}</td>
               <td className='border px-4 py-2'>
                 {referral.isSetup ? 'Yes' : 'No'}
               </td>

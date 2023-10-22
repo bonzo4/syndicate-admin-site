@@ -16,7 +16,9 @@ type Referral = {
   createdAt: Date;
   members: number;
   isSetup: boolean;
+  views: number | null;
   checked: boolean;
+  setReferrals: (referrals: Referral[]) => void;
 };
 
 type useReferralListOptions = {
@@ -139,6 +141,13 @@ export function useReferralList({
                   .select('id')
                   .eq('guild_id', referral.guild_id);
 
+                const { count, error } = await supabase
+                  .from('views')
+                  .select('id')
+                  .eq('guild_id', referral.guild_id);
+
+                console.log(error);
+
                 return {
                   userName: referral.discord_users?.name ?? 'Unknown',
                   guildName: referral.guilds?.name ?? 'Unknown',
@@ -147,8 +156,10 @@ export function useReferralList({
                     referral.updated_at ?? referral.created_at
                   ),
                   members: referral.guilds?.member_count ?? 0,
+                  views: count,
                   isSetup: Boolean(data?.length),
                   checked: referral.checked,
+                  setReferrals,
                 };
               })
             )
@@ -178,14 +189,23 @@ export function useReferralList({
                 .select('id')
                 .eq('guild_id', referral.guild_id);
 
+              const { count, error } = await supabase
+                .from('views')
+                .select('id', { count: 'exact' })
+                .eq('guild_id', referral.guild_id);
+
+              console.log(error);
+
               return {
                 userName: referral.discord_users?.name ?? 'Unknown',
                 guildName: referral.guilds?.name ?? 'Unknown',
                 guildId: referral.guild_id,
                 createdAt: new Date(referral.updated_at ?? referral.created_at),
                 members: referral.guilds?.member_count ?? 0,
+                views: count,
                 isSetup: Boolean(data?.length),
                 checked: referral.checked,
+                setReferrals,
               };
             })
           )
