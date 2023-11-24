@@ -1,10 +1,10 @@
 'use client';
 
-import { useViewIntervals } from '@/hooks/charts/views';
 import { Database } from '@/types';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
+import { generateRandomColors } from '@/utils/colors';
 
 import {
   CategoryScale,
@@ -16,13 +16,16 @@ import {
   Title,
   Tooltip,
   BarElement,
+  PieController,
 } from 'chart.js';
+import { useNewsLinkIntervals } from '@/hooks/charts/links';
 import {
-  useInteractionIntervals,
-  useRedirectClicksIntervals,
-} from '@/hooks/intervals/interactions';
+  useGuildLinkCounts,
+  useLinkClicksByUrl,
+} from '@/hooks/proportions/links';
 
 ChartJs.register(
+  PieController,
   BarElement,
   CategoryScale,
   LinearScale,
@@ -33,47 +36,30 @@ ChartJs.register(
   Legend
 );
 
-type ViewsAndInteractionsGraphProps = {
-  newsId?: number;
-  stopDate?: Date;
+type LinkGraphAndPieProps = {
+  newsId: number;
 };
 
-export function ViewsAndInteractionsGraph({
-  newsId,
-  stopDate,
-}: ViewsAndInteractionsGraphProps) {
+export function LinkGraphAndPie({ newsId }: LinkGraphAndPieProps) {
   const supabase = createClientComponentClient<Database>();
 
-  const [rangeType, setRangeType] = useState<'days' | 'months' | 'years'>(
-    'days'
-  );
-  const [range, setRange] = useState<number>(1);
+  const [rangeType, setRangeType] = useState<'hour' | 'day' | 'week'>('day');
   const [prime, setPrime] = useState<boolean>(false);
-  const [endDate, setEndDate] = useState<Date>(new Date());
-
-  const viewIntervals = useViewIntervals({
+  const linkIntervals = useNewsLinkIntervals({
     supabase,
     rangeType,
-    range,
     newsId,
-    endDate,
     prime,
   });
 
-  const interactionIntervals = useInteractionIntervals({
+  const linkCounts = useGuildLinkCounts({
     supabase,
-    rangeType,
-    range,
     newsId,
-    endDate,
   });
 
-  const redirectClicks = useRedirectClicksIntervals({
+  const linkByUrlCounts = useLinkClicksByUrl({
     supabase,
-    rangeType,
-    range,
     newsId,
-    endDate,
   });
 
   const onPrimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,44 +76,38 @@ export function ViewsAndInteractionsGraph({
               type='radio'
               name='rangeType'
               value='days'
-              checked={rangeType === 'days'}
-              onChange={() => setRangeType('days')}
+              checked={rangeType === 'hour'}
+              onChange={() => setRangeType('hour')}
             />
-            <span className='text-foreground'>Days</span>
+            <span className='text-foreground'>6 Hours</span>
             <input
               type='radio'
               name='rangeType'
               value='months'
-              checked={rangeType === 'months'}
-              onChange={() => setRangeType('months')}
+              checked={rangeType === 'day'}
+              onChange={() => setRangeType('day')}
             />
-            <span className='text-foreground'>Months</span>
+            <span className='text-foreground'>Day</span>
             <input
               type='radio'
               name='rangeType'
               value='years'
-              checked={rangeType === 'years'}
-              onChange={() => setRangeType('years')}
+              checked={rangeType === 'week'}
+              onChange={() => setRangeType('week')}
             />
-            <span className='text-foreground'>Years</span>
-            <input
-              type='number'
-              value={range}
-              onChange={(e) => setRange(parseInt(e.target.value))}
-              className='w-16 rounded-md border bg-background px-2 py-1 text-foreground'
-            />
+            <span className='text-foreground'>Week</span>
             <input type='checkbox' checked={prime} onChange={onPrimeChange} />
             <span className='text-foreground'>Prime</span>
           </div>
           <Bar
             data={{
-              labels: viewIntervals.map((interval) =>
+              labels: linkIntervals.map((interval) =>
                 new Date(interval.interval).toLocaleString()
               ),
               datasets: [
                 {
-                  label: 'Views',
-                  data: viewIntervals.map((interval) => interval.views),
+                  label: 'Links',
+                  data: linkIntervals.map((interval) => interval.links),
                   backgroundColor: '#F87171',
                   borderColor: '#F87171',
                   barThickness: 6,
@@ -142,20 +122,13 @@ export function ViewsAndInteractionsGraph({
               },
             }}
           />
-          <Bar
+          <Pie
             data={{
-              labels: interactionIntervals.map((interval) =>
-                new Date(interval.interval).toLocaleString()
-              ),
+              labels: linkCounts.map((guild) => guild.guildName),
               datasets: [
                 {
-                  label: 'Interactions',
-                  data: interactionIntervals.map(
-                    (interval) => interval.interactions
-                  ),
-                  backgroundColor: '#60A5FA',
-                  borderColor: '#60A5FA',
-                  barThickness: 6,
+                  data: linkCounts.map((guild) => guild.links),
+                  backgroundColor: generateRandomColors(linkCounts.length),
                 },
               ],
             }}
@@ -167,19 +140,13 @@ export function ViewsAndInteractionsGraph({
               },
             }}
           />
-          <Bar
+          <Pie
             data={{
-              labels: redirectClicks.map((interval) =>
-                new Date(interval.interval).toLocaleString()
-              ),
+              labels: linkByUrlCounts.map((url) => url.url),
               datasets: [
                 {
-                  label: 'Redirect Clicks',
-                  data: redirectClicks.map((interval) => interval.interactions),
-                  // green
-                  backgroundColor: '#34D399',
-                  borderColor: '#34D399',
-                  barThickness: 6,
+                  data: linkByUrlCounts.map((url) => url.clicks),
+                  backgroundColor: generateRandomColors(linkCounts.length),
                 },
               ],
             }}

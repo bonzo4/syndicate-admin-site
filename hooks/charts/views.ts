@@ -7,50 +7,83 @@ type ViewInterval = {
   interval: string;
 };
 
-type useViewIntervalOptions = {
-  rangeType: 'days' | 'months' | 'years';
-  range: number;
-  newsId?: number;
-  endDate: Date;
+type useNewsViewIntervalOptions = {
+  rangeType: 'hour' | 'day' | 'week';
+  newsId: number;
   supabase: SupabaseClient<Database>;
   prime: boolean;
 };
 
-export function useViewIntervals({
+export function useNewsViewIntervals({
   rangeType,
-  range,
   newsId,
   supabase,
-  endDate,
   prime,
-}: useViewIntervalOptions): ViewInterval[] {
+}: useNewsViewIntervalOptions): ViewInterval[] {
   const [viewIntervals, setViewIntervals] = useState<ViewInterval[]>([]);
 
   useEffect(() => {
     const fetchViewIntervals = async () => {
-      const { data, error } = await supabase.rpc('get_view_graph', {
-        range_type: rangeType,
-        range: range,
-        news_doc_id: newsId,
-        end_date: endDate.toISOString(),
-        primed: prime,
-      });
+      if (rangeType === 'hour') {
+        const { data, error } = await supabase.rpc('get_news_views_hour', {
+          news_doc_id: newsId,
+          primed: prime,
+        });
 
-      if (error) {
-        console.log(error);
-        return;
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
       }
-      if (data) {
-        setViewIntervals(
-          data.map((interval) => ({
-            interval: interval.time_segment,
-            views: interval.document_count,
-          }))
-        );
+      if (rangeType === 'day') {
+        const { data, error } = await supabase.rpc('get_news_views_day', {
+          news_doc_id: newsId,
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'week') {
+        const { data, error } = await supabase.rpc('get_news_views_week', {
+          news_doc_id: newsId,
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
       }
     };
     fetchViewIntervals();
-  }, [supabase, rangeType, range, newsId, endDate, prime]);
+  }, [supabase, rangeType, newsId, prime]);
 
   return viewIntervals;
 }

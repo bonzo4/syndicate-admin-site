@@ -10,15 +10,9 @@ import { useNewsMetrics } from '@/hooks/stats/newsMetrics';
 
 type IndividualNewsStatsProps = {
   newsId: number;
-  tags: string[];
-  stopDate: Date;
 };
 
-export function IndividualNewsStats({
-  newsId,
-  tags,
-  stopDate,
-}: IndividualNewsStatsProps) {
+export function IndividualNewsStats({ newsId }: IndividualNewsStatsProps) {
   const supabase = createClientComponentClient<Database>();
   const metrics = useNewsMetrics(newsId, supabase);
   const errors = useCountStatsByNews(supabase, newsId, 'bot_errors');

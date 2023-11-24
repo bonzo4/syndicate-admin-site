@@ -1,10 +1,10 @@
 'use client';
 
-import { useTagViewIntervals } from '@/hooks/charts/views';
 import { Database } from '@/types';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
+import { generateRandomColors } from '@/utils/colors';
 
 import {
   CategoryScale,
@@ -16,10 +16,13 @@ import {
   Title,
   Tooltip,
   BarElement,
+  PieController,
 } from 'chart.js';
-import { useTagInteractionIntervals } from '@/hooks/intervals/interactions';
+import { useNewsQuizIntervals } from '@/hooks/charts/quiz';
+import { useGuildQuizCounts } from '@/hooks/proportions/quiz';
 
 ChartJs.register(
+  PieController,
   BarElement,
   CategoryScale,
   LinearScale,
@@ -30,45 +33,33 @@ ChartJs.register(
   Legend
 );
 
-type TagsViewsAndInteractionsGraphProps = {
-  tag: string;
+type QuizGraphAndPieProps = {
+  newsId: number;
 };
 
-export function TagViewsAndInteractionsGraph({
-  tag,
-}: TagsViewsAndInteractionsGraphProps) {
+export function QuizGraphAndPie({ newsId }: QuizGraphAndPieProps) {
   const supabase = createClientComponentClient<Database>();
 
-  const [rangeType, setRangeType] = useState<'days' | 'months' | 'years'>(
-    'days'
-  );
-  const [range, setRange] = useState<number>(1);
+  const [rangeType, setRangeType] = useState<'hour' | 'day' | 'week'>('day');
   const [prime, setPrime] = useState<boolean>(false);
-  const [endDate, setEndDate] = useState<Date>(new Date());
-
-  const viewIntervals = useTagViewIntervals({
+  const quizIntervals = useNewsQuizIntervals({
     supabase,
     rangeType,
-    range,
-    endDate,
+    newsId,
     prime,
-    tag,
   });
 
-  const interactionIntervals = useTagInteractionIntervals({
+  const quizCounts = useGuildQuizCounts({
     supabase,
-    rangeType,
-    range,
-    endDate,
-    tag,
+    newsId,
   });
 
-  const onPrimeChange = () => {
-    setPrime(!prime);
+  const onPrimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrime(e.target.checked);
   };
 
   return (
-    <div className='flex w-[80%] grow flex-col items-center py-2'>
+    <div className='flex w-full grow flex-col items-center py-2'>
       <div className='animate-in flex w-full grow flex-row space-x-10 text-foreground opacity-0'>
         <div className='flex w-full grow flex-col items-center space-y-2'>
           <div className='flex flex-row items-center space-x-2'>
@@ -77,44 +68,38 @@ export function TagViewsAndInteractionsGraph({
               type='radio'
               name='rangeType'
               value='days'
-              checked={rangeType === 'days'}
-              onChange={() => setRangeType('days')}
+              checked={rangeType === 'hour'}
+              onChange={() => setRangeType('hour')}
             />
-            <span className='text-foreground'>Days</span>
+            <span className='text-foreground'>6 Hours</span>
             <input
               type='radio'
               name='rangeType'
               value='months'
-              checked={rangeType === 'months'}
-              onChange={() => setRangeType('months')}
+              checked={rangeType === 'day'}
+              onChange={() => setRangeType('day')}
             />
-            <span className='text-foreground'>Months</span>
+            <span className='text-foreground'>Day</span>
             <input
               type='radio'
               name='rangeType'
               value='years'
-              checked={rangeType === 'years'}
-              onChange={() => setRangeType('years')}
+              checked={rangeType === 'week'}
+              onChange={() => setRangeType('week')}
             />
-            <span className='text-foreground'>Years</span>
-            <input
-              type='number'
-              value={range}
-              onChange={(e) => setRange(parseInt(e.target.value))}
-              className='w-16 rounded-md border bg-background px-2 py-1 text-foreground'
-            />
+            <span className='text-foreground'>Week</span>
             <input type='checkbox' checked={prime} onChange={onPrimeChange} />
             <span className='text-foreground'>Prime</span>
           </div>
           <Bar
             data={{
-              labels: viewIntervals.map((interval) =>
+              labels: quizIntervals.map((interval) =>
                 new Date(interval.interval).toLocaleString()
               ),
               datasets: [
                 {
-                  label: 'Views',
-                  data: viewIntervals.map((interval) => interval.views),
+                  label: 'Quizs',
+                  data: quizIntervals.map((interval) => interval.quizs),
                   backgroundColor: '#F87171',
                   borderColor: '#F87171',
                   barThickness: 6,
@@ -129,20 +114,13 @@ export function TagViewsAndInteractionsGraph({
               },
             }}
           />
-          <Bar
+          <Pie
             data={{
-              labels: interactionIntervals.map((interval) =>
-                new Date(interval.interval).toLocaleString()
-              ),
+              labels: quizCounts.map((guild) => guild.guildName),
               datasets: [
                 {
-                  label: 'Interactions',
-                  data: interactionIntervals.map(
-                    (interval) => interval.interactions
-                  ),
-                  backgroundColor: '#60A5FA',
-                  borderColor: '#60A5FA',
-                  barThickness: 6,
+                  data: quizCounts.map((guild) => guild.quizs),
+                  backgroundColor: generateRandomColors(quizCounts.length),
                 },
               ],
             }}
