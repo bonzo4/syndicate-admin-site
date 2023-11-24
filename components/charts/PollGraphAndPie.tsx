@@ -17,6 +17,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import { useNewsPollIntervals } from '@/hooks/charts/poll';
 import { useGuildPollCounts } from '@/hooks/proportions/poll';
@@ -30,7 +31,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type PollGraphAndPieProps = {

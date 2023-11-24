@@ -17,6 +17,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import { useNewsWalletIntervals } from '@/hooks/charts/wallet';
 import { useGuildWalletCounts } from '@/hooks/proportions/wallet';
@@ -30,7 +31,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type WalletGraphAndPieProps = {

@@ -17,6 +17,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import { useNewsInputIntervals } from '@/hooks/charts/input';
 import { useGuildInputCounts } from '@/hooks/proportions/input';
@@ -30,7 +31,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type InputGraphAndPieProps = {

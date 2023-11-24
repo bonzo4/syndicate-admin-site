@@ -17,6 +17,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import { useNewsLinkIntervals } from '@/hooks/charts/links';
 import {
@@ -33,7 +34,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type LinkGraphAndPieProps = {

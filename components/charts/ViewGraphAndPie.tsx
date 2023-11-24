@@ -18,6 +18,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import {
   useInteractionIntervals,
@@ -34,7 +35,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type ViewGraphAndPieProps = {

@@ -17,6 +17,7 @@ import {
   Tooltip,
   BarElement,
   PieController,
+  ArcElement,
 } from 'chart.js';
 import { useNewsQuizIntervals } from '@/hooks/charts/quiz';
 import { useGuildQuizCounts } from '@/hooks/proportions/quiz';
@@ -30,7 +31,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type QuizGraphAndPieProps = {

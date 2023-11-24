@@ -15,6 +15,7 @@ import {
   Title,
   Tooltip,
   BarElement,
+  ArcElement,
 } from 'chart.js';
 import {
   useInteractionIntervals,
@@ -29,7 +30,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type ViewsAndInteractionsGraphProps = {

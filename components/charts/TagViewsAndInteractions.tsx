@@ -16,6 +16,7 @@ import {
   Title,
   Tooltip,
   BarElement,
+  ArcElement,
 } from 'chart.js';
 import { useTagInteractionIntervals } from '@/hooks/intervals/interactions';
 
@@ -27,7 +28,8 @@ ChartJs.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 type TagsViewsAndInteractionsGraphProps = {
