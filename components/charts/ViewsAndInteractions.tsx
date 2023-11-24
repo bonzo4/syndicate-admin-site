@@ -1,6 +1,5 @@
 'use client';
 
-import { useViewIntervals } from '@/hooks/charts/views';
 import { Database } from '@/types';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState } from 'react';
@@ -51,14 +50,14 @@ export function ViewsAndInteractionsGraph({
   const [prime, setPrime] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const viewIntervals = useViewIntervals({
-    supabase,
-    rangeType,
-    range,
-    newsId,
-    endDate,
-    prime,
-  });
+  // const viewIntervals = useViewIntervals({
+  //   supabase,
+  //   rangeType,
+  //   range,
+  //   newsId,
+  //   endDate,
+  //   prime,
+  // });
 
   const interactionIntervals = useInteractionIntervals({
     supabase,
@@ -119,7 +118,7 @@ export function ViewsAndInteractionsGraph({
             <input type='checkbox' checked={prime} onChange={onPrimeChange} />
             <span className='text-foreground'>Prime</span>
           </div>
-          <Bar
+          {/* <Bar
             data={{
               labels: viewIntervals.map((interval) =>
                 new Date(interval.interval).toLocaleString()
@@ -141,7 +140,7 @@ export function ViewsAndInteractionsGraph({
                 },
               },
             }}
-          />
+          /> */}
           <Bar
             data={{
               labels: interactionIntervals.map((interval) =>
