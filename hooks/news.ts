@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 
 export type NewsDoc = {
   tags: string[];
-  //   views: number;
-  //   interactions: number;
-  //   linkClicks: number;
+  views: number;
+  interactions: number;
+  linkClicks: number;
 } & Database['public']['Tables']['discord_news']['Row'];
 
 export const useNewsList = (
@@ -119,11 +119,23 @@ export const usePreviewsList = (
 
       if (data) {
         setNews(
-          data.map((news) => ({
-            ...news,
-            tags: news.tags.map((tag) => tag.name),
-            newsPreview: news.news_previews[0],
-          }))
+          await Promise.all(
+            data.map(async (news) => {
+              const { data, error } = await supabase
+                .from('news_metrics')
+                .select('*')
+                .eq('news_id', news.id)
+                .single();
+              return {
+                ...news,
+                tags: news.tags.map((tag) => tag.name),
+                views: data?.views || 0,
+                interactions: data?.interactions || 0,
+                linkClicks: data?.link_clicks || 0,
+                newsPreview: news.news_previews[0],
+              };
+            })
+          )
         );
       }
     };

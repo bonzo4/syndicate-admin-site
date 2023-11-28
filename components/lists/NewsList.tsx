@@ -33,6 +33,9 @@ export function NewsList() {
             <th className='px-4 py-2'>Created at</th>
             <th className='px-4 py-2'>Scheduled For</th>
             <th className='px-4 py-2'>tags</th>
+            <th className='px-4 py-2'>Views</th>
+            <th className='px-4 py-2'>Interactions</th>
+            <th className='px-4 py-2'>Link Clicks</th>
             <th className='px-4 py-2'>Late</th>
           </tr>
         </thead>
@@ -54,6 +57,9 @@ export function NewsList() {
               <td className='border px-4 py-2'>
                 {news.tags.map((tag) => tag)}
               </td>
+              <td className='border px-4 py-2'>{news.views}</td>
+              <td className='border px-4 py-2'>{news.interactions}</td>
+              <td className='border px-4 py-2'>{news.linkClicks}</td>
               <td className='border px-4 py-2 underline hover:no-underline'>
                 {news.tags.includes('news') &&
                 new Date(news.schedule).getHours() > 10
