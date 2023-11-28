@@ -48,7 +48,6 @@ export function PollGraphAndPie({ newsId }: PollGraphAndPieProps) {
     supabase,
     rangeType,
     newsId,
-    prime,
   });
 
   const pollCounts = useGuildPollCounts({

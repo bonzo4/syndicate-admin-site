@@ -19,12 +19,8 @@ import {
   PieController,
   ArcElement,
 } from 'chart.js';
-import { useNewsLinkIntervals } from '@/hooks/charts/links';
-import {
-  useGuildLinkCounts,
-  useLinkClicksByUrl,
-} from '@/hooks/proportions/links';
-
+import { useProfileIntervals } from '@/hooks/charts/profile';
+import { useGuildProfileCounts } from '@/hooks/proportions/profile';
 ChartJs.register(
   PieController,
   BarElement,
@@ -38,29 +34,22 @@ ChartJs.register(
   ArcElement
 );
 
-type LinkGraphAndPieProps = {
+type ProfileGraphAndPieProps = {
   newsId: number;
 };
 
-export function LinkGraphAndPie({ newsId }: LinkGraphAndPieProps) {
+export function ProfileGraphAndPie() {
   const supabase = createClientComponentClient<Database>();
 
   const [rangeType, setRangeType] = useState<'hour' | 'day' | 'week'>('day');
   const [prime, setPrime] = useState<boolean>(false);
-  const linkIntervals = useNewsLinkIntervals({
+  const profileIntervals = useProfileIntervals({
     supabase,
     rangeType,
-    newsId,
   });
 
-  const linkCounts = useGuildLinkCounts({
+  const profileCounts = useGuildProfileCounts({
     supabase,
-    newsId,
-  });
-
-  const linkByUrlCounts = useLinkClicksByUrl({
-    supabase,
-    newsId,
   });
 
   const onPrimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,13 +91,13 @@ export function LinkGraphAndPie({ newsId }: LinkGraphAndPieProps) {
           </div>
           <Bar
             data={{
-              labels: linkIntervals.map((interval) =>
+              labels: profileIntervals.map((interval) =>
                 new Date(interval.interval).toLocaleString()
               ),
               datasets: [
                 {
-                  label: 'Links',
-                  data: linkIntervals.map((interval) => interval.links),
+                  label: 'Profile Interactions',
+                  data: profileIntervals.map((interval) => interval.profiles),
                   backgroundColor: '#F87171',
                   borderColor: '#F87171',
                   barThickness: 6,
@@ -125,29 +114,11 @@ export function LinkGraphAndPie({ newsId }: LinkGraphAndPieProps) {
           />
           <Pie
             data={{
-              labels: linkCounts.map((guild) => guild.guildName),
+              labels: profileCounts.map((guild) => guild.guildName),
               datasets: [
                 {
-                  data: linkCounts.map((guild) => guild.links),
-                  backgroundColor: generateRandomColors(linkCounts.length),
-                },
-              ],
-            }}
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-            }}
-          />
-          <Pie
-            data={{
-              labels: linkByUrlCounts.map((url) => url.url),
-              datasets: [
-                {
-                  data: linkByUrlCounts.map((url) => url.clicks),
-                  backgroundColor: generateRandomColors(linkCounts.length),
+                  data: profileCounts.map((guild) => guild.profiles),
+                  backgroundColor: generateRandomColors(profileCounts.length),
                 },
               ],
             }}

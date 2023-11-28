@@ -30,8 +30,8 @@ export function useGuildQuizCounts({
         return;
       }
       if (data) {
-        const guilds = data.filter((guild) => guild.doc_count > 5);
-        const otherGuilds = data.filter((guild) => guild.doc_count <= 5);
+        const guilds = data.filter((guild) => guild.doc_count > 1);
+        const otherGuilds = data.filter((guild) => guild.doc_count <= 1);
         setGuildQuizs([
           ...guilds.map((guild) => ({
             guildId: guild.guild_id,

@@ -71,19 +71,13 @@ export function useGuildLinkCounts({
         return;
       }
       if (data) {
-        const guilds = data.filter((guild) => guild.doc_count > 5);
-        const otherGuilds = data.filter((guild) => guild.doc_count <= 5);
+        const guilds = data;
         setGuildLinks([
           ...guilds.map((guild) => ({
             guildId: guild.guild_id,
             guildName: guild.guild_name,
             links: guild.doc_count,
           })),
-          {
-            guildId: 'other',
-            guildName: 'Other',
-            links: otherGuilds.reduce((acc, curr) => acc + curr.doc_count, 0),
-          },
         ]);
       }
     };

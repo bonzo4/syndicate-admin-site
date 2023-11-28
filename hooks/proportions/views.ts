@@ -30,8 +30,8 @@ export function useGuildViewCounts({
         return;
       }
       if (data) {
-        const guilds = data.filter((guild) => guild.view_count > 5);
-        const otherGuilds = data.filter((guild) => guild.view_count <= 5);
+        const guilds = data.filter((guild) => guild.view_count > 1);
+        const otherGuilds = data.filter((guild) => guild.view_count <= 1);
         setGuildViews([
           ...guilds.map((guild) => ({
             guildId: guild.guild_id,

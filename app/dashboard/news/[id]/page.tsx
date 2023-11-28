@@ -3,13 +3,12 @@ import { Database } from '@/types';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NewsErrorList } from '@/components/lists/NewsErrorList';
-import { ViewsAndInteractionsPieGraph } from '@/components/charts/ViewsAndInteractionsPie';
-import { ViewGraphAndPie } from '@/components/charts/ViewGraphAndPie';
 import { PollGraphAndPie } from '@/components/charts/PollGraphAndPie';
 import { QuizGraphAndPie } from '@/components/charts/QuizGraphAndPie';
 import { InputGraphAndPie } from '@/components/charts/InputGraphAndPie';
 import { LinkGraphAndPie } from '@/components/charts/LinkGraphAndPie';
 import { WalletGraphAndPie } from '@/components/charts/WalletGraphAndPie';
+import { NewsViewGraphAndPie } from '@/components/charts/NewsViewGraphAndPie';
 
 export default async function NewsInfoPage({
   params,
@@ -72,7 +71,7 @@ export default async function NewsInfoPage({
       </div>
       <IndividualNewsStats newsId={news.id} />
       <div className='flex w-[75%] flex-col'>
-        <ViewGraphAndPie newsId={news.id} />
+        <NewsViewGraphAndPie newsId={news.id} />
         <LinkGraphAndPie newsId={news.id} />
         {interactions.includes('POLL') && <PollGraphAndPie newsId={news.id} />}
         {interactions.includes('QUIZ') && <QuizGraphAndPie newsId={news.id} />}

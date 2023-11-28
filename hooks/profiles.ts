@@ -7,6 +7,8 @@ type ProfileRow = {
   name: string;
   points: number;
   referrals: number;
+  solWallet: string | null;
+  ethWallet: string | null;
   created_at: Date;
 };
 
@@ -44,6 +46,8 @@ export const useProfileList = (
                 points: profile.points,
                 referrals: count || 0,
                 created_at: new Date(profile.created_at),
+                solWallet: profile.sol_wallet,
+                ethWallet: profile.eth_wallet,
               };
             })
           )

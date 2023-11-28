@@ -48,7 +48,6 @@ export function InputGraphAndPie({ newsId }: InputGraphAndPieProps) {
     supabase,
     rangeType,
     newsId,
-    prime,
   });
 
   const inputCounts = useGuildInputCounts({

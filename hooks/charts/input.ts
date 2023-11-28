@@ -11,14 +11,12 @@ type useNewsInputIntervalOptions = {
   rangeType: 'hour' | 'day' | 'week';
   newsId: number;
   supabase: SupabaseClient<Database>;
-  prime: boolean;
 };
 
 export function useNewsInputIntervals({
   rangeType,
   newsId,
   supabase,
-  prime,
 }: useNewsInputIntervalOptions): InputInterval[] {
   const [inputIntervals, setInputIntervals] = useState<InputInterval[]>([]);
 
@@ -80,7 +78,7 @@ export function useNewsInputIntervals({
       }
     };
     fetchInputIntervals();
-  }, [supabase, rangeType, newsId, prime]);
+  }, [supabase, rangeType, newsId]);
 
   return inputIntervals;
 }

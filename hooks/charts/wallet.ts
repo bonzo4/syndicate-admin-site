@@ -11,14 +11,12 @@ type useNewsWalletIntervalOptions = {
   rangeType: 'hour' | 'day' | 'week';
   newsId: number;
   supabase: SupabaseClient<Database>;
-  prime: boolean;
 };
 
 export function useNewsWalletIntervals({
   rangeType,
   newsId,
   supabase,
-  prime,
 }: useNewsWalletIntervalOptions): WalletInterval[] {
   const [walletIntervals, setWalletIntervals] = useState<WalletInterval[]>([]);
 
@@ -80,7 +78,7 @@ export function useNewsWalletIntervals({
       }
     };
     fetchWalletIntervals();
-  }, [supabase, rangeType, newsId, prime]);
+  }, [supabase, rangeType, newsId]);
 
   return walletIntervals;
 }

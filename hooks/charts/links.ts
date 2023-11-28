@@ -7,18 +7,116 @@ type LinkInterval = {
   interval: string;
 };
 
+type useLinkClickIntervalOptions = {
+  rangeType: 'hour' | 'day' | 'week' | 'month' | 'year';
+  supabase: SupabaseClient<Database>;
+};
+
+export function useLinkClickIntervals({
+  rangeType,
+  supabase,
+}: useLinkClickIntervalOptions): LinkInterval[] {
+  const [linkIntervals, setLinkIntervals] = useState<LinkInterval[]>([]);
+
+  useEffect(() => {
+    const fetchLinkIntervals = async () => {
+      if (rangeType === 'hour') {
+        const { data, error } = await supabase.rpc('get_link_click_hour', {});
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setLinkIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              links: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'day') {
+        const { data, error } = await supabase.rpc('get_link_click_day', {});
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setLinkIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              links: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'week') {
+        const { data, error } = await supabase.rpc('get_link_click_week', {});
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setLinkIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              links: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'month') {
+        const { data, error } = await supabase.rpc('get_link_click_month', {});
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setLinkIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              links: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'year') {
+        const { data, error } = await supabase.rpc('get_link_click_year', {});
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setLinkIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              links: interval.document_count,
+            }))
+          );
+        }
+      }
+    };
+    fetchLinkIntervals();
+  }, [supabase, rangeType]);
+
+  return linkIntervals;
+}
+
 type useNewsLinkIntervalOptions = {
   rangeType: 'hour' | 'day' | 'week';
   newsId: number;
   supabase: SupabaseClient<Database>;
-  prime: boolean;
 };
 
 export function useNewsLinkIntervals({
   rangeType,
   newsId,
   supabase,
-  prime,
 }: useNewsLinkIntervalOptions): LinkInterval[] {
   const [linkIntervals, setLinkIntervals] = useState<LinkInterval[]>([]);
 
@@ -80,7 +178,7 @@ export function useNewsLinkIntervals({
       }
     };
     fetchLinkIntervals();
-  }, [supabase, rangeType, newsId, prime]);
+  }, [supabase, rangeType, newsId]);
 
   return linkIntervals;
 }

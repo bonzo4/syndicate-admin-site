@@ -48,7 +48,6 @@ export function WalletGraphAndPie({ newsId }: WalletGraphAndPieProps) {
     supabase,
     rangeType,
     newsId,
-    prime,
   });
 
   const walletCounts = useGuildWalletCounts({

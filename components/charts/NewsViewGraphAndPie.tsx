@@ -39,11 +39,11 @@ ChartJs.register(
   ArcElement
 );
 
-type ViewGraphAndPieProps = {
+type NewsViewGraphAndPieProps = {
   newsId: number;
 };
 
-export function ViewGraphAndPie({ newsId }: ViewGraphAndPieProps) {
+export function NewsViewGraphAndPie({ newsId }: NewsViewGraphAndPieProps) {
   const supabase = createClientComponentClient<Database>();
 
   const [rangeType, setRangeType] = useState<'hour' | 'day' | 'week'>('day');

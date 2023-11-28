@@ -2,83 +2,77 @@ import { Database } from '@/types';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { useState, useEffect } from 'react';
 
-type QuizInterval = {
-  quizs: number;
+type ProfileInterval = {
+  profiles: number;
   interval: string;
 };
 
-type useNewsQuizIntervalOptions = {
+type useNewsProfileIntervalOptions = {
   rangeType: 'hour' | 'day' | 'week';
-  newsId: number;
   supabase: SupabaseClient<Database>;
 };
 
-export function useNewsQuizIntervals({
+export function useProfileIntervals({
   rangeType,
-  newsId,
   supabase,
-}: useNewsQuizIntervalOptions): QuizInterval[] {
-  const [quizIntervals, setQuizIntervals] = useState<QuizInterval[]>([]);
+}: useNewsProfileIntervalOptions): ProfileInterval[] {
+  const [profileIntervals, setProfileIntervals] = useState<ProfileInterval[]>(
+    []
+  );
 
   useEffect(() => {
-    const fetchQuizIntervals = async () => {
+    const fetchProfileIntervals = async () => {
       if (rangeType === 'hour') {
-        const { data, error } = await supabase.rpc('get_news_quiz_hour', {
-          news_doc_id: newsId,
-        });
+        const { data, error } = await supabase.rpc('get_profile_hour', {});
 
         if (error) {
           console.log(error);
           return;
         }
         if (data) {
-          setQuizIntervals(
+          setProfileIntervals(
             data.map((interval) => ({
               interval: interval.time_segment,
-              quizs: interval.document_count,
+              profiles: interval.document_count,
             }))
           );
         }
       }
       if (rangeType === 'day') {
-        const { data, error } = await supabase.rpc('get_news_quiz_day', {
-          news_doc_id: newsId,
-        });
+        const { data, error } = await supabase.rpc('get_profile_day', {});
 
         if (error) {
           console.log(error);
           return;
         }
         if (data) {
-          setQuizIntervals(
+          setProfileIntervals(
             data.map((interval) => ({
               interval: interval.time_segment,
-              quizs: interval.document_count,
+              profiles: interval.document_count,
             }))
           );
         }
       }
       if (rangeType === 'week') {
-        const { data, error } = await supabase.rpc('get_news_quiz_week', {
-          news_doc_id: newsId,
-        });
+        const { data, error } = await supabase.rpc('get_profile_week', {});
 
         if (error) {
           console.log(error);
           return;
         }
         if (data) {
-          setQuizIntervals(
+          setProfileIntervals(
             data.map((interval) => ({
               interval: interval.time_segment,
-              quizs: interval.document_count,
+              profiles: interval.document_count,
             }))
           );
         }
       }
     };
-    fetchQuizIntervals();
-  }, [supabase, rangeType, newsId]);
+    fetchProfileIntervals();
+  }, [supabase, rangeType]);
 
-  return quizIntervals;
+  return profileIntervals;
 }

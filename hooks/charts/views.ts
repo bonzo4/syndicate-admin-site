@@ -7,12 +7,124 @@ type ViewInterval = {
   interval: string;
 };
 
-type useNewsViewIntervalOptions = {
-  rangeType: 'hour' | 'day' | 'week';
-  newsId: number;
+type useViewIntervalOptions = {
+  rangeType: 'hour' | 'day' | 'week' | 'month' | 'year';
   supabase: SupabaseClient<Database>;
   prime: boolean;
 };
+
+type useNewsViewIntervalOptions = {
+  rangeType: 'hour' | 'day' | 'week' | 'month' | 'year';
+  supabase: SupabaseClient<Database>;
+  newsId: number;
+  prime: boolean;
+};
+
+export function useViewIntervals({
+  rangeType,
+  supabase,
+  prime,
+}: useViewIntervalOptions): ViewInterval[] {
+  const [viewIntervals, setViewIntervals] = useState<ViewInterval[]>([]);
+
+  useEffect(() => {
+    const fetchViewIntervals = async () => {
+      if (rangeType === 'hour') {
+        const { data, error } = await supabase.rpc('get_views_hour', {
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'day') {
+        const { data, error } = await supabase.rpc('get_views_day', {
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'week') {
+        const { data, error } = await supabase.rpc('get_views_week', {
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'month') {
+        const { data, error } = await supabase.rpc('get_views_month', {
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+      if (rangeType === 'year') {
+        const { data, error } = await supabase.rpc('get_views_year', {
+          primed: prime,
+        });
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        if (data) {
+          setViewIntervals(
+            data.map((interval) => ({
+              interval: interval.time_segment,
+              views: interval.document_count,
+            }))
+          );
+        }
+      }
+    };
+    fetchViewIntervals();
+  }, [supabase, rangeType, prime]);
+
+  return viewIntervals;
+}
 
 export function useNewsViewIntervals({
   rangeType,

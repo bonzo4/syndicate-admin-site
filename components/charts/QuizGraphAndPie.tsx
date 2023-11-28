@@ -48,7 +48,6 @@ export function QuizGraphAndPie({ newsId }: QuizGraphAndPieProps) {
     supabase,
     rangeType,
     newsId,
-    prime,
   });
 
   const quizCounts = useGuildQuizCounts({

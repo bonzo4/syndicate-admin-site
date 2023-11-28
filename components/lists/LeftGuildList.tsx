@@ -1,43 +1,29 @@
 'use client';
 
-import { useGuildList } from '@/hooks/guilds';
+import { useGuildList, useLeftGuildList } from '@/hooks/guilds';
 import { Database } from '@/types';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-export function GuildList() {
+export function LeftGuildList() {
   const supabase = createClientComponentClient<Database>();
 
   const [page, setPage] = useState<number>(0);
-  const [search, setSearch] = useState<string>('');
-  const [setup, setSetup] = useState<boolean | null>(null);
-  const guilds = useGuildList({
+  const guilds = useLeftGuildList({
     supabase,
     page,
-    search,
-    setup,
   });
-
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setPage(0);
-  };
 
   return (
     <div className='flex w-full flex-col items-center space-y-2'>
-      <input
-        className='rounded-md bg-gray-800 px-4 py-2 text-white'
-        placeholder='Search'
-        onChange={onSearchChange}
-      ></input>
       <table className='table-auto'>
         <thead>
           <tr>
             <th className='px-4 py-2'>Name</th>
             <th className='px-4 py-2'>Members</th>
-            <th className='px-4 py-2'>Joined at</th>
+            <th className='px-4 py-2'>Left at</th>
             <th className='px-4 py-2'>Setup?</th>
             <th className='px-4 py-2'>Tags</th>
             <th className='px-4 py-2'>Views</th>

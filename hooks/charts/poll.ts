@@ -11,14 +11,12 @@ type useNewsPollIntervalOptions = {
   rangeType: 'hour' | 'day' | 'week';
   newsId: number;
   supabase: SupabaseClient<Database>;
-  prime: boolean;
 };
 
 export function useNewsPollIntervals({
   rangeType,
   newsId,
   supabase,
-  prime,
 }: useNewsPollIntervalOptions): PollInterval[] {
   const [pollIntervals, setPollIntervals] = useState<PollInterval[]>([]);
 
@@ -80,7 +78,7 @@ export function useNewsPollIntervals({
       }
     };
     fetchPollIntervals();
-  }, [supabase, rangeType, newsId, prime]);
+  }, [supabase, rangeType, newsId]);
 
   return pollIntervals;
 }

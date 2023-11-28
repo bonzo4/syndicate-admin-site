@@ -31,18 +31,26 @@ export function ProfileList() {
             <th className='px-4 py-2'>Name</th>
             <th className='px-4 py-2'>Points</th>
             <th className='px-4 py-2'>Referrals</th>
+            <th className='px-4 py-2'>Sol Wallet</th>
+            <th className='px-4 py-2'>Eth Wallet</th>
             <th className='px-4 py-2'>Joined at</th>
           </tr>
         </thead>
         <tbody className=''>
           {profiles.map((profile, index) => (
             <tr key={profile.name}>
-              <td className='border px-4 py-2'>{index + 1}.</td>
+              <td className='border px-4 py-2'>{page * 10 + index + 1}.</td>
               <td className='flex flex-row space-x-2 border px-4 py-2'>
                 <h1 className='text-white'>{profile.name}</h1>
               </td>
               <td className='border px-4 py-2'>{profile.points}</td>
               <td className='border px-4 py-2'>{profile.referrals}</td>
+              <td className='border px-4 py-2'>
+                {profile.solWallet?.slice(0, 5)}...
+              </td>
+              <td className='border px-4 py-2'>
+                {profile.ethWallet?.slice(0, 5)}...
+              </td>
               <td className='border px-4 py-2'>
                 {new Date(profile.created_at).toLocaleDateString()}
               </td>
