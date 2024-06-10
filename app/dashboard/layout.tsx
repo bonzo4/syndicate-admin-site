@@ -30,14 +30,19 @@ export default async function RootLayout({
     .single();
   if (error || !staffUserData) redirect('/');
 
-  if (staffUserData.staff_role !== 'ADMIN') redirect('/');
-
-  return (
-    <main className='h-fill flex w-full grow flex-row bg-background'>
-      <Sidebar />
-      <div className='flex w-full flex-col items-center justify-center'>
-        {children}
-      </div>
-    </main>
-  );
+  if (
+    staffUserData.staff_role === 'ADMIN' ||
+    staffUserData.staff_role === 'MANAGER'
+  ) {
+    return (
+      <main className='h-fill flex w-full grow flex-row bg-background'>
+        <Sidebar staffRole={staffUserData.staff_role} />
+        <div className='flex w-full flex-col items-center justify-center'>
+          {children}
+        </div>
+      </main>
+    );
+  } else {
+    redirect('/');
+  }
 }
