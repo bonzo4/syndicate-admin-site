@@ -12,11 +12,13 @@ type AmbassadorListProps = {
 
 export function AmbassadorList({ userId, setUserId }: AmbassadorListProps) {
   const supabase = createClientComponentClient<Database>();
+  const [search, setSearch] = useState<string>('');
 
   const [page, setPage] = useState<number>(0);
   const ambassadors = useAmbassadorList({
     supabase,
     page,
+    search,
   });
 
   const handleSetUserId = (userId: string | undefined) => {
@@ -26,6 +28,13 @@ export function AmbassadorList({ userId, setUserId }: AmbassadorListProps) {
   return (
     <div className='mt-10 flex w-full flex-col items-center space-y-2'>
       <h1 className='text-3xl font-bold'>Ambassadors</h1>
+      <input
+        type='text'
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder='Search by code'
+        className='border px-4 py-2 text-black'
+      />
       <table className='table-auto'>
         <thead>
           <tr>
@@ -38,7 +47,7 @@ export function AmbassadorList({ userId, setUserId }: AmbassadorListProps) {
           {ambassadors.map((referral) => (
             <tr key={referral.userId}>
               <td className='border px-4 py-2'>{referral.userName}</td>
-              <td className='border px-4 py-2'>{referral.referralCode}</td>
+              <td className='border px-4 py-2'>{referral.code}</td>
               <td className='border px-4 py-2'>{referral.referralCount}</td>
               <td className='border px-4 py-2'>
                 {userId === referral.userId ? (

@@ -25,12 +25,14 @@ type useReferralListOptions = {
   supabase: SupabaseClient<Database>;
   page: number;
   userId?: string;
+  search?: string;
 };
 
 export function useUserReferralList({
   supabase,
   page,
   userId,
+  search,
 }: useReferralListOptions): UserReferral[] {
   const { from, to } = getPagination(page, 10);
   const [referrals, setReferrals] = useState<UserReferral[]>([]);
@@ -38,12 +40,18 @@ export function useUserReferralList({
   useEffect(() => {
     const fetchReferrals = async () => {
       if (userId) {
-        const { data, error } = await supabase
+        const query = supabase
           .from('user_referrals')
           .select('*, discord_users!user_id(name)')
           .eq('user_id', userId)
           .order('created_at', { ascending: false })
           .range(from, to);
+
+        if (search) {
+          query.ilike('discord_users.name', `%${search}%`);
+        }
+
+        const { data, error } = await query;
 
         if (error) {
           console.log(error);
@@ -102,7 +110,7 @@ export function useUserReferralList({
         );
     };
     fetchReferrals();
-  }, [supabase, from, to, userId]);
+  }, [supabase, from, to, userId, search]);
 
   return referrals;
 }
@@ -221,30 +229,39 @@ export function useReferralList({
 type Ambassador = {
   userId: string;
   userName: string;
-  referralCode: string;
+  code: string;
   referralCount: number;
 };
 
 type useAmbassadorListOptions = {
   supabase: SupabaseClient<Database>;
   page: number;
+  search?: string;
 };
 
 export function useAmbassadorList({
   supabase,
   page,
+  search,
 }: useAmbassadorListOptions): Ambassador[] {
   const { from, to } = getPagination(page, 10);
   const [ambassadors, setAmbassadors] = useState<Ambassador[]>([]);
 
   useEffect(() => {
     const fetchAmbassadors = async () => {
-      const { data, error } = await supabase
-        .from('discord_users')
+      const query = supabase
+        .from('ambassador_codes')
         .select('*')
         .order('created_at', { ascending: false })
-        .neq('referral_code', null)
+        .neq('code', null)
         .range(from, to);
+
+      if (search) {
+        console.log(search);
+        query.ilike('code', `%${search}%`);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.log(error);
@@ -255,16 +272,28 @@ export function useAmbassadorList({
         setAmbassadors(
           await Promise.all(
             data.map(async (ambassador) => {
+              if (!ambassador.discord_id)
+                return {
+                  userId: '',
+                  userName: '',
+                  code: '',
+                  referralCount: 0,
+                };
               const { data } = await supabase
+                .from('discord_users')
+                .select('name')
+                .eq('id', ambassador.discord_id)
+                .single();
+              const { count } = await supabase
                 .from('guild_referrals')
-                .select('guild_id')
-                .eq('discord_user_id', ambassador.id);
+                .select('guild_id', { count: 'exact' })
+                .eq('discord_user_id', ambassador.discord_id);
 
               return {
-                userId: ambassador.id,
-                userName: ambassador.name,
-                referralCode: ambassador.referral_code ?? '',
-                referralCount: data?.length ?? 0,
+                userId: ambassador.discord_id ?? '',
+                userName: data?.name ?? 'Unknown',
+                code: ambassador.code ?? '',
+                referralCount: count ?? 0,
               };
             })
           )
@@ -272,7 +301,7 @@ export function useAmbassadorList({
       }
     };
     fetchAmbassadors();
-  }, [supabase, from, to]);
+  }, [supabase, from, to, search]);
 
   return ambassadors;
 }
