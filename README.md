@@ -1,3 +1,18 @@
+```
+app/*               # Source code
+components/*        # Components
+lib/hooks/*         # Custom hooks
+lib/utils/*         # Utilities
+```
+
+## Features
+
+- Nextjs
+- Tailwind CSS
+- Data on Syndicate News
+- Supabase authentication and database
+- Hosted on Vercel
+
 # Supabase Starter
 
 This starter configures Supabase Auth to use cookies, making the user's session available throughout the entire Next.js app - Client Components, Server Components, Route Handlers, Server Actions and Middleware.
